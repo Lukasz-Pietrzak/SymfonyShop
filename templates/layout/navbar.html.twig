@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-between m-2">
+	<ul class="nav nav-pills">
+		<li class="nav-item">
+			<a href="{{ path('ui_home') }}" class="nav-link active" aria-current="page">Home</a>
+		</li>
+
+		<li class="nav-item">
+			<a href="{{ path('list') }}" class="nav-link">Products</a>
+		</li>
+	</ul>
+
+	<ul class="nav nav-pills">
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<li class="nav-item">
+				<a href="{{ path('logout') }}" class="nav-link">Log out</a>
+			</li>
+		{% else %}
+			<li class="nav-item">
+				<a href="{{ path('ui_register') }}" class="nav-link">Sign up</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ path('ui_login') }}" class="nav-link">Log in</a>
+			</li>
+		{% endif %}
+
+	</ul>
+</div>

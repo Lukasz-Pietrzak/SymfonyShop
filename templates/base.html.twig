@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Dashnoard!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{% block stylesheets %}
+			<link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
+			<link href="{{ asset('styles/app.css') }}" rel="stylesheet">
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body style="background-color: #f4f6f9;">
+		{% block navbar %}
+			{% include 'layout/navbar.html.twig' %}
+		{% endblock %}
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		{% for message in app.flashes('error') %}
+			<div class="alert alert-danger">
+				{{ message }}
+			</div>
+		{% endfor %}
+		{% block container %}
+			<div class="content">
+				<section class="content">
+					<div class="container-fluid">
+						{% block body %}{% endblock %}
+					</div>
+				</section>
+			</div>
+		{% endblock %}
+		{% block javascripts_bottom %}{% endblock %}
+	</body>
+</html>
