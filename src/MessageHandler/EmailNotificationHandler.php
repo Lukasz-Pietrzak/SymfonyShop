@@ -22,8 +22,8 @@ class EmailNotificationHandler
             ->subject($emailNotification->getSubject())
             ->htmlTemplate($emailNotification->getHtmlTemplate())
             ->context([
-                'expiration_date' => new \DateTime('+7 days'),
                 'username' => $emailNotification->getUsername(),
+                'authenticationCode' => $emailNotification->getAuthenticationCode()
             ]);
 
         try {

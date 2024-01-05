@@ -29,16 +29,6 @@ security:
         main:
             lazy: true
             provider: all_users
-            # form_login:
-            #     login_path: ui_login
-            #     check_path: ui_login
-            #     enable_csrf: true
-            # logout:
-            #     path: /logout
-            #     target: ui_home
-            # custom_authenticator: App\Security\AppAuthenticator
-            # lazy: true
-            # provider: app_user_provider
             form_login:
                 login_path: ui_login
                 check_path: ui_login
@@ -46,7 +36,6 @@ security:
             logout:
                 path: /logout
                 target: ui_home
-            # provider: app_admin_provider
 
         
                 

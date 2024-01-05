@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\UserAuthenticationRepository;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -16,6 +16,8 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function __construct(
         #[ORM\Column(type: Types::STRING, unique: true)]
         private string $email,
+        #[ORM\Column(type: Types::STRING, nullable: true)]
+        private string $authenticationCode
     ) {
     }
     #[ORM\Column]
@@ -26,14 +28,14 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     public function getId(): string
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -80,6 +82,16 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function setAuthenticationCode(string $authenticationCode): void
+    {
+        $this->authenticationCode = $authenticationCode;
+    }
+
+    public function getAuthenticationCode(): string
+    {
+        return $this->authenticationCode;
     }
 
     /**

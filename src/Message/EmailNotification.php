@@ -9,6 +9,7 @@ class EmailNotification
         private string $subject,
         private string $htmlTemplate,
         private string $username,
+        private string $authenticationCode,
     ) {
     }
 
@@ -30,5 +31,10 @@ class EmailNotification
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    public function getAuthenticationCode(): string
+    {
+        return $this->authenticationCode;
     }
 }

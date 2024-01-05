@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\DTO\UserAuthenticationDTO;
 use App\DTO\UserDTO;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
