@@ -28,6 +28,22 @@ class ProductProvider
 
     }
 
+    public function loadProductsByName($productName):array 
+    {
+        $product = $this->productQueryRepository->findBy(['name' => $productName]);
+
+
+        if(!$product){
+            throw new \InvalidArgumentException('Product not found');
+        }
+        
+        return $product;
+
+    }
+
+
+
+
     public function loadAll():array 
     {
         $products = $this->productQueryRepository->findAll();

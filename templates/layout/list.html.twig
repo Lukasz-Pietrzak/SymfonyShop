@@ -1,66 +1,85 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+	<div style="margin: 0 auto; text-align: center;">
+		{{ form_start(articleForm) }}
+		{{ form_widget(articleForm.browse_field, {'attr': {'style':'width: 20%; height: 50px; display: inline-block; font-size: 20px;'}}) }}
+		<button type="submit" class="btn btn-danger mb-2 custom-button" style="display: inline-block; height: 50px; font-size: 16px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewbox="0 0 16 16">
+				<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+			</svg>
+		</button>
+
+		{{ form_end(articleForm) }}
+
+
+	</div>
+
+
 	{% if is_granted('ROLE_ADMIN') %}
 		<div class="my-3 text-center">
-			<a href="{{ path('create')}}" class="btn btn-primary text-center">{{'AddProduct'|trans}}</a>
+			<a href="{{ path('create')}}" class="btn btn-danger text-center fs-5">{{'AddProduct'|trans}}</a>
 		</div>
 	{% endif %}
 
 	<div class="container">
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col" class="col-md-4 text-center">{{ 'Name'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'Color'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'Producent'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'Barcode'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'PriceNetto'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'PriceBrutto'|trans }}</th>
-					<th scope="col" class="col-md-4 text-center">{{ 'VAT'|trans }}</th>
-				</tr>
-			</thead>
+<table class="table">
+    <!-- Your table content here -->
+
+<thead>
+    <tr>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'Name'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'Color'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'Producent'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'Barcode'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNetto'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBrutto'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT'|trans }}</th>
+    </tr>
+</thead>
+
 			<tbody>
 				{% for productFind in product %}
 					<tr>
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.name }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.color }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.producent }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.barcode }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.price.pricenetto }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.price.pricebrutto }}</span>
 							</div>
 						</td>
 
 						<td class="col-md-4">
-							<div class="product-container p-3 text-center">
+							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.price.vat }}</span>
 							</div>
 						</td>
@@ -68,21 +87,23 @@
 						{% if is_granted('ROLE_ADMIN') %}
 							<td class="col-md-4">
 								<div class="my-3 text-center">
-									<a href="{{ path('edit', {'id': productFind.id}) }}" class="btn btn-primary text-center">Edit</a>
+									<a href="{{ path('edit', {'id': productFind.id}) }}" class="btn btn-danger text-center fs-5">Edit</a>
 								</div>
 							</td>
 
 							<td class="col-md-4">
-								<div class="my-3 text-center">
-									<a href="{{ path('delete', {'id': productFind.id}) }}" class="btn btn-primary text-center">Delete</a>
+								<div class="my-3 text-center fs-5">
+									<a href="{{ path('delete', {'id': productFind.id}) }}" class="btn btn-danger text-center fs-5">Delete</a>
 								</div>
 							</td>
 						{% else %}
 							<td class="col-md-4">
 								<div class="my-3 text-center">
-									<button class="btn btn-primary">Buy</button>
+									<button class="btn btn-danger" style="white-space: nowrap; font-size: 20px;">Add to cart</button>
 								</div>
+
 							</td>
+
 						{% endif %}
 					</tr>
 				{% endfor %}

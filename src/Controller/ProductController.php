@@ -4,7 +4,9 @@ declare (strict_types = 1);
 
 namespace App\Controller;
 
+use App\DTO\BrowserDTO;
 use App\DTO\ProductDTO;
+use App\Form\BrowserFormType;
 use App\Form\ProductType;
 use App\Handler\Product\Create;
 use App\Handler\Product\Update;
@@ -24,12 +26,28 @@ class ProductController extends AbstractController
     {
     }
     #[Route('/list', name: 'list')]
-    public function products_list(ProductProvider $productProvider): Response
+    public function products_list(Request $request, ProductProvider $productProvider): Response
     {
         $products = $productProvider->loadAll();
+        $dto = new BrowserDTO();
+
+        $form = $this->createForm(BrowserFormType::class, $dto);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (empty($dto->browse_field)) {
+                $products = $productProvider->loadAll();
+            }else{
+                $products = $productProvider->loadProductsByName($dto->browse_field);
+            }
+            
+        }
 
         return $this->render('layout/list.html.twig', [
+            'articleForm' => $form->createView(),
             'product' => $products,
+            'message' => 'Search product'
         ]);
     }
 
@@ -56,7 +74,7 @@ class ProductController extends AbstractController
 
         return $this->render('layout/form.html.twig', [
             'articleForm' => $form->createView(),
-            'message' => "Add",
+            'message' => "Add product",
         ]);
     }
 

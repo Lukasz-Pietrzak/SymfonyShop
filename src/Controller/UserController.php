@@ -47,6 +47,18 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/account', name: 'ui_account')]
+    public function Account(
+        AuthenticationUtils $authenticationUtils,
+    ): Response {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+        return $this->render('login/login.html.twig', [
+            'error' => $error,
+            'last_username' => $lastUsername,
+        ]);
+    }
+
     #[Route('/logout', name: 'logout')]
     public function logout(): void
     {

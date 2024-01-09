@@ -4,16 +4,22 @@
 {% endblock %}
 
 {% block body %}
-	{{ form_errors(registrationForm) }}
+    <div style="width: 400px; margin: 0 auto;">
+        {{ form_errors(registrationForm) }}
 
-	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.email) }}
-	{{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+        {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email, {'attr': {'style': 'height: 40px; font-size: 20px;'}}) }}
+
+        {{ form_row(registrationForm.plainPassword, {
+            'label': 'Password',
+            'attr': {'style': 'height: 40px; font-size: 20px;'}
         }) }}
-	{{ form_row(registrationForm.agreeTerms) }}
 
-	<button type="submit" class="btn btn-primary">Register</button>
-	{{ form_end(registrationForm) }}
+        {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'height: 20px; width: 20px'}}) }}
 
+        <button type="submit" class="btn btn-danger fs-5" style="height: 50px; width: 400px; ">Register</button>
+        {{ form_end(registrationForm) }}
+    </div>
 {% endblock %}
+
+

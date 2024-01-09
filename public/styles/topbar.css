@@ -1,0 +1,65 @@
+#navbar{
+    margin-top: 20px;
+    margin-left: 90px;
+    z-index: 5;
+}
+
+
+ul {
+    list-style: none;
+    display: flex;
+    margin-top: 30px; /* dodaj margines od góry */
+    justify-content: center;
+  }
+  
+  li {
+    margin-right: 25px; /* dostosuj odstęp między elementami według potrzeb */
+  }
+  
+  a {
+    text-decoration: none;
+    line-height: 60px; /* dostosuj wysokość linii według potrzeb */
+  }
+  
+
+.nav{
+    margin-left: 50px;
+    font-weight: 400;
+    font-size: 25px;
+    text-decoration: none;
+    color: black;
+}
+
+.nav-right{
+    margin-left: 50px;
+    font-weight: 400;
+    font-size: 25px;
+    text-decoration: none;
+    color: black;
+}
+
+
+#Logo{
+    color: crimson;
+    font-size: 50px;
+    font-style: italic;
+}
+
+/* #Logo:hover{
+} */
+
+.nav:hover, .nav-right:hover{
+    cursor: pointer;
+}
+
+#Logout{
+    background-color: crimson;
+    padding: 15px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 30px;
+    color: white;
+}
+
+
+

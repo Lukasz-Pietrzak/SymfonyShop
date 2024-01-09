@@ -1,16 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+   <div style="width: 400px; margin: 0 auto;">
 	<form action="{{ path('ui_login')}}" method="post" class="needs-validation" novalidate>
 	{# <form action="/login" method="post" class="needs-validation" novalidate> #}
-		<div class="form-group">
-			<label for="username">Email:</label>
-			<input type="text" class="form-control" id="username" name="_username">
-		</div>
+<div class="form-group">
+    <label for="username">Email:</label>
+    <input type="text" class="form-control" id="username" name="_username" style="height: 40px; font-size: 20px;">
+</div>
 
-		<div class="form-group mt-3">
+
+		<div class="form-group mt-3" style="">
 			<label for="password">Password:</label>
-			<input type="password" class="form-control" id="password" name="_password" required autocomplete="new-password">
+			<input type="password" class="form-control" id="password" name="_password" required autocomplete="new-password" style="height: 40px; font-size: 20px;">
 		</div>
 
 		{% if error %}
@@ -20,7 +22,8 @@
 		<input type="hidden" name="_target_path" value="{{ path('ui_home') }}">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-		<button type="submit" name='submit' class="btn btn-primary mt-3">Log in</button>
+		<button type="submit" name='submit' class="btn btn-danger mt-3 fs-5" style="width:400px; height: 50px;">Log in</button>
 	</form>
+	</div>
 
 {% endblock %}

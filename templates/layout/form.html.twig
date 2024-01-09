@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	{{ form_start(articleForm, {'attr': {'class': 'custom-form'}}) }}
-	{{ form_widget(articleForm) }}
-	<button type="submit" class="btn btn-primary mb-2 custom-button">
-		{{message}}
-	</button>
-	{{ form_end(articleForm) }}
+	<div style="width: 400px; margin: 0 auto; font-size: 20px;">
+		{{ form_start(articleForm, {'attr': {'class': 'custom-form'}}) }}
+		{{ form_widget(articleForm) }}
+		<button type="submit" class="btn btn-danger mb-2 custom-button fs-5" style="width: 400px;">
+			{{message}}
+		</button>
+		{{ form_end(articleForm) }}
+	</div>
 {% endblock %}

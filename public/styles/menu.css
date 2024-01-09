@@ -1,0 +1,256 @@
+body{
+    height: auto;
+}
+
+#top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px; 
+}
+
+#top-main-text{
+    float: left;
+    font-size: 45px;
+    font-style: italic;
+    font-weight: 100;
+    margin-left: 150px;
+    font-weight: bold;
+    max-width: 700px;
+}
+
+#top-main-pizza{
+    width: 40%;
+    float: right;
+    animation: pizza_rotation 80s linear infinite;
+    z-index: 1;
+    margin-right: 50px;
+}
+
+@keyframes pizza_rotation{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+#perfect-moment{
+    color: crimson;
+}
+
+#order-now{
+    background-color: crimson;
+    padding: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 30px;
+    color: white;
+    position: relative;
+    left: 25%;
+}
+
+#order-now:hover{
+    cursor: pointer;
+}
+
+#main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+
+#main-text-div{
+text-align: center;
+}
+
+#main-text {
+    font-size: 45px;
+    font-style: italic;
+    font-weight: bold;
+    color: crimson;
+}
+
+.main-pizza-image {
+    width: 250px;
+ 
+}
+
+#box1, #box2, #box3{
+    width: 450px;
+    min-height: 500px;
+    height: auto;
+    background-color: #e8e8e8;
+    padding: 30px;
+    margin: auto; 
+    border-radius: 20px;
+}
+
+
+#pizza1, #pizza2, #pizza3{
+    font-size: 30px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.main-pizza-tekst{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.add-to-cart{
+    background-color: crimson;
+    padding: 15px;
+    padding-left: 60px;
+    padding-right: 60px;
+    border-radius: 30px;
+    color: white;
+    font-size: 25px;
+}
+
+.add-to-cart:hover{
+    cursor: pointer;
+}
+
+#div-main-pizza-description{
+    height: 100px;
+    overflow: hidden;
+}
+
+.main-pizza-description{
+    font-size: 20px;
+
+}
+
+#div-main-pizza-description:hover{
+    height: auto;
+}
+
+#div-main-pizza-description::before {
+    content: '... ';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: white;
+}
+
+
+#bottom{
+    text-align: center;
+    width: 500px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+/* #bottom-container{
+    width: 400px;
+} */
+
+#Our-story{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#About-us{
+    color: crimson;
+    font-size: 50px;
+    font-style: italic;
+}
+
+#Bottom-text{
+    font-size: 20px;
+}
+
+#Contact{
+    text-align: center;
+}
+
+#Contact-us{
+    color: crimson;
+    font-size: 50px;
+    font-style: italic;
+}
+
+#Phone-number{
+    text-decoration: underline;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+#Menu-logo-div{
+    text-align: center;
+}
+
+#Menu-logo{
+    color: crimson;
+    font-size: 50px;
+    font-style: italic;
+}
+
+#hello-top{
+    text-align: center;
+}
+
+.hello-top-class{
+    font-size: 25px;
+    margin: 20px;
+    background-color: #c4c3c3;
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 30px;
+}
+
+.hello-top-class:hover{
+    cursor: pointer;
+}
+
+#Products_div{
+    text-align: center;
+    margin-top: 50px;
+}
+
+#Products_id{
+    font-size: 23px;
+    padding: 20px;
+    padding-left: 220px;
+    padding-right: 220px;
+    border-radius: 30px;
+    font-weight: bold;
+}
+
+#addProductDiv{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.addProductSpan{
+    font-size: 23px;
+    padding: 20px;
+    padding-left: 220px;
+    padding-right: 220px;
+    border-radius: 30px;
+    font-weight: bold;
+}
+
+label{
+    font-size: 20px;
+}
+
+.SaveClass {
+    width: 250px;
+    height: 55px;
+    border: 1px solid black;
+    position: relative; /* Poprawiono błąd w atrybucie 'position' */
+    left: 50%; /* Dodano 'left' zamiast ustawiania go na elemencie SaveProduct */
+    transform: translateX(-50%);
+    margin-top: 50px; /* Zmieniono 'marginTop' na 'margin-top' */
+}
