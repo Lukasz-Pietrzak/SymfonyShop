@@ -23,6 +23,7 @@ class Create
             color: $dto->color,
             producent: $dto->producent,
             barcode: $dto->barcode,
+            imageFile: $dto->imageFile,
             price: $this->createPrice($dto),
         );
 

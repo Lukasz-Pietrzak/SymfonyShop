@@ -2,6 +2,10 @@ body{
     height: auto;
 }
 
+#container{
+    margin-top: -90px;
+}
+
 #top{
     display: flex;
     justify-content: space-between;
@@ -81,7 +85,7 @@ text-align: center;
  
 }
 
-#box1, #box2, #box3{
+#box{
     width: 450px;
     min-height: 500px;
     height: auto;
@@ -89,6 +93,7 @@ text-align: center;
     padding: 30px;
     margin: auto; 
     border-radius: 20px;
+    margin-top: 100px;
 }
 
 
@@ -254,3 +259,20 @@ label{
     transform: translateX(-50%);
     margin-top: 50px; /* Zmieniono 'marginTop' na 'margin-top' */
 }
+
+#justOrder{
+    color: crimson;
+    font-size: 50px;
+    font-style: normal;
+}
+
+#boxHome{
+    width: 450px;
+    min-height: 500px;
+    height: auto;
+    background-color: #e8e8e8;
+    padding: 30px;
+    margin: auto; 
+    border-radius: 20px;
+}
+

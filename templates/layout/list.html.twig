@@ -36,6 +36,7 @@
         <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNetto'|trans }}</th>
         <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBrutto'|trans }}</th>
         <th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT'|trans }}</th>
+        <th scope="col" class="col-md-4 text-center fs-5">{{ 'ImageName'|trans }}</th>
     </tr>
 </thead>
 
@@ -77,10 +78,17 @@
 								<span>{{ productFind.price.pricebrutto }}</span>
 							</div>
 						</td>
+						
 
 						<td class="col-md-4">
 							<div class="product-container p-3 text-center fs-5">
 								<span>{{ productFind.price.vat }}</span>
+							</div>
+						</td>
+
+							<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ productFind.imageName }}</span>
 							</div>
 						</td>
 
@@ -96,15 +104,15 @@
 									<a href="{{ path('delete', {'id': productFind.id}) }}" class="btn btn-danger text-center fs-5">Delete</a>
 								</div>
 							</td>
-						{% else %}
+						{# {% else %}
 							<td class="col-md-4">
 								<div class="my-3 text-center">
 									<button class="btn btn-danger" style="white-space: nowrap; font-size: 20px;">Add to cart</button>
 								</div>
 
-							</td>
+							</td> #}
 
-						{% endif %}
+						{% endif %} 
 					</tr>
 				{% endfor %}
 			</tbody>

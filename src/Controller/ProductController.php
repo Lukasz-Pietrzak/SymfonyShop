@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[AsController('/products')]
 class ProductController extends AbstractController
@@ -26,6 +27,7 @@ class ProductController extends AbstractController
     {
     }
     #[Route('/list', name: 'list')]
+    #[IsGranted('ROLE_ADMIN')]
     public function products_list(Request $request, ProductProvider $productProvider): Response
     {
         $products = $productProvider->loadAll();

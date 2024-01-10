@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+	<link href="{{ asset('styles/menu.css') }}" rel="stylesheet">
+	<link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
+
+{% endblock %}
+
 {% block body %}
-	<div style="width: 400px; margin: 0 auto; font-size: 20px;">
+	<div style="width: 500px; margin: 0 auto; font-size: 20px;">
 		{{ form_start(articleForm, {'attr': {'class': 'custom-form'}}) }}
 		{{ form_widget(articleForm) }}
-		<button type="submit" class="btn btn-danger mb-2 custom-button fs-5" style="width: 400px;">
+		<button type="submit" class="btn btn-danger mb-2 custom-button fs-5" style="width: 500px;">
 			{{message}}
 		</button>
 		{{ form_end(articleForm) }}

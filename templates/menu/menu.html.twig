@@ -1,102 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-   <link href="{{ asset('styles/menu.css') }}" rel="stylesheet">
-    
+	<link href="{{ asset('styles/menu.css') }}" rel="stylesheet">
+	<link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
+
 {% endblock %}
 
 {% block body %}
+	<div style="margin: 0 auto; text-align: center;">
+		{{ form_start(articleForm) }}
+		{{ form_widget(articleForm.browse_field, {'attr': {'style':'width: 20%; height: 50px; display: inline-block; font-size: 20px;'}}) }}
+		<button type="submit" class="btn btn-danger mb-2 custom-button" style="display: inline-block; height: 50px; font-size: 16px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewbox="0 0 16 16">
+				<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+			</svg>
+		</button>
 
-    <div id="container">
+		{{ form_end(articleForm) }}
+		{% set box = 1 %}
+	</div>
+	<div id="container">
+		<div id="main">
+			{% for productFind in product %}
+				<div id="box">
+					<span class="main-pizza-tekst">
+						{{productFind.name}}</span>
+					<br>
+					<img class="main-pizza-image" src="{{ asset('images/products/' ~ productFind.imageName) }}"/>
 
-        <div id="top">
-            <span id="top-main-text"> Savor the Flavor, Share the Joy: Our Pizza, <span id="perfect-moment">Your Perfect Moment! </span><br><br><span id="order-now">Order now!</span></span>
-            <img id="top-main-pizza" src="{{ asset('images/main_pizza.png') }}" alt="pizza">
-        </div>
+					<br><br>
+					<div id="div-main-pizza-description">
+						<span class="main-pizza-description">Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
+												                    Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
+												                    Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem
+						</span>
+					</div>
+					<br><br><br>
+					<span class="add-to-cart">Add to cart</span>
+					<br>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 
-        <div id="main-text-div">
-            <span id="main-text">Our bestsellers</span>
-        </div>
- 
-
-        <div id="main">
-            <br>
-            <br>
-            <div id="box1">
-                <span class="main-pizza-tekst">Pizza1</span>
-                <br>
-                <img class="main-pizza-image" src="images/pizza1.png"></img>
-                <br>
-                <div id="div-main-pizza-description">
-                <span class="main-pizza-description">Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                    Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                    Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem 
-                </span>
-            </div>
-                <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
-                <br>
-            </div>
-            <div id="box2">
-                <span class="main-pizza-tekst">Pizza2</span>
-                <br>
-                <img class="main-pizza-image" src="images/pizza2.png"></img>
-                <br>
-                <div id="div-main-pizza-description">
-                    <span class="main-pizza-description">Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem 
-                    </span>
-                </div>
-                <span class="main-pizza-description">Lorem ipsum</span>
-                <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
-                <br>
-            </div>
-            <div id="box3">
-                <span class="main-pizza-tekst">Pizza3</span>
-                <br>
-                <img class="main-pizza-image" src="images/pizza3.png"></img>
-                <br>
-                <div id="div-main-pizza-description">
-                    <span class="main-pizza-description">Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem 
-                    </span>
-                </div>
-                <span class="main-pizza-description">Lorem ipsum</span>
-                <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
-                <br>
-            </div>
-            <script>
-
-            </script>
-        </div>
-        <br><br><br>
-        <div id="bottom">
-            <span id="Our-story">Our-story</span>
-            <br>
-            <span id="About-us">About us</span>
-            <br><br>
-            <span id="Bottom-text">
-            Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem 
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum
-                        Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem 
-                    </span>
-        </div>
-        
-<br><br><br><br>
-
-        <div id="Contact">
-            <span id="Contact-us">Contact us</span>
-            <br><br>
-            <span id="Phone-number">+48 111 111 111</span>
-            <br><br><br><br><br><br><br><br>
-        </div>
-
-    </div>    
 {% endblock %}

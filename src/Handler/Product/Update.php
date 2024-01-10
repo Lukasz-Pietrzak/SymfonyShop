@@ -21,6 +21,7 @@ class Update
         $product->setColor($dto->color);
         $product->setProducent($dto->producent);
         $product->setBarcode($dto->barcode);
+        $product->setImageFile($dto->imageFile);
         $product->getPrice()->setPriceNetto($dto->price_netto);
         $product->getPrice()->setPriceBrutto($dto->price_brutto);
         $product->getPrice()->setVat($dto->vat);

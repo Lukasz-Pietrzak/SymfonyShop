@@ -13,7 +13,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'ui_home')]
     public function homepage(): Response
     {
-        return $this->render('menu/menu.html.twig', [
+        return $this->render('home/home.html.twig', [
         ]);
     }
 }
