@@ -1,4 +1,7 @@
 AddProduct: Add product
+AddIngredient: Add ingredient
+ShowIngredient: Show ingredients
+ShowProduct: Show product
 Name: Name
 Color: Color
 Producent: Producent
@@ -6,3 +9,4 @@ Barcode: Barcode
 PriceNetto: Price Netto
 PriceBrutto: Price Brutto
 VAT: VAT
+Category: Category

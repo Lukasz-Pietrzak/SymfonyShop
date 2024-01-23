@@ -23,41 +23,31 @@ class ProductType extends AbstractType
                 'constraints' => [new NotBlank()],
                 'required' => false,
             ])
-            ->add('color', TextType::class, [
+            ->add('description', TextType::class, [
                 'constraints' => [new NotBlank()],
                 'required' => false,
             ])
-            ->add('producent', TextType::class, [
-                'constraints' => [new NotBlank()],
-                'required' => false,
-            ])
-            ->add('barcode', NumberType::class, [
-                'constraints' => [new NotBlank()],
-                'required' => false,
-            ])
-            ->add('price_netto', NumberType::class, [
-                'constraints' => [new NotBlank()],
-                'required' => false,
-            ])
-            ->add('price_brutto', NumberType::class, [
-                'constraints' => [new NotBlank()],
-                'required' => false,
-            ])
-            ->add('vat', NumberType::class, [
-                'constraints' => [new NotBlank()],
-                'required' => false,
-            ])
-            // ->add('imageName')
-            // ->add('imageSize')
-            // ->add('updatedAt');
+            ->add('priceNettoSmall', NumberType::class)
+            ->add('priceBruttoSmall', NumberType::class)
+            ->add('vatSmall', NumberType::class)
+            // ... other fields ...
+            ->add('priceNettoMedium', NumberType::class)
+            ->add('priceBruttoMedium', NumberType::class)
+            ->add('vatMedium', NumberType::class)
+            // ... other fields ...
+            ->add('priceNettoLarge', NumberType::class)
+            ->add('priceBruttoLarge', NumberType::class)
+            ->add('vatLarge', NumberType::class)
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => false,
                 // 'delete_label' => 'Remove Image',
-                'download_uri' => false,
                 'image_uri' => true,
-                // 'imagine_pattern' => 'product_photo_320x240',
+                'download_uri' => true,
                 'asset_helper' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Please upload an image file.']),
+                ],
             ]);
     }
 

@@ -17,17 +17,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product extends BaseEntity
 {
+    #[ORM\ManyToOne(inversedBy: 'Product')]
+    private ?Order $orders = null;
+
     public function __construct(
         #[ORM\Column(type : Types::STRING)]
         private string $name,
-        #[ORM\Column(type: Types::STRING)]
-        private string $color,
-        #[ORM\Column(type: Types::STRING)]
-        private string $producent,
-        #[ORM\Column(type: Types::INTEGER)]
-        private int $barcode,
+        #[ORM\Column(type: Types::TEXT)]
+        private string $description,
         #[ORM\OneToOne(targetEntity: Price::class, cascade: ["persist", "remove"], orphanRemoval: true)]
         private Price $price,
+        // #[ORM\OneToOne(targetEntity: Ingredients::class, cascade: ["persist", "remove"], orphanRemoval: true)]
+        // private Ingredients $ingredients,
         #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
         private ?File $imageFile = null,
         #[ORM\Column(nullable: true)]
@@ -38,13 +39,6 @@ class Product extends BaseEntity
         private ?\DateTimeImmutable $updatedAt = null,
     ) {
     }
-
-    // #[ORM\Column(nullable: true)]
-    // private ?string $imageName = null;
-    // #[ORM\Column(nullable: true)]
-    // private ?int $imageSize = null;
-    // #[ORM\Column(nullable: true)]
-    // private ?\DateTimeImmutable $updatedAt = null;
 
     public function setImageFile(?File $imageFile = null): void
     {
@@ -92,21 +86,6 @@ class Product extends BaseEntity
         return $this->name;
     }
 
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    public function getProducent(): string
-    {
-        return $this->producent;
-    }
-
-    public function getBarcode(): int
-    {
-        return $this->barcode;
-    }
-
     public function getPrice(): Price
     {
         return $this->price;
@@ -117,24 +96,31 @@ class Product extends BaseEntity
         $this->name = $name;
     }
 
-    public function setColor(string $color): void
-    {
-        $this->color = $color;
-    }
-
-    public function setProducent(string $producent): void
-    {
-        $this->producent = $producent;
-    }
-
-    public function setBarcode(int $barcode): void
-    {
-        $this->barcode = $barcode;
-    }
-
     public function setPrice(Price $price): void
     {
         $this->price = $price;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getOrders(): ?Order
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?Order $orders): static
+    {
+        $this->orders = $orders;
+
+        return $this;
     }
 
 }

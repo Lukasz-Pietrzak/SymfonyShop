@@ -6,6 +6,7 @@ use App\Repository\UserAuthenticationRepository;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -17,7 +18,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
         #[ORM\Column(type: Types::STRING, unique: true)]
         private string $email,
         #[ORM\Column(type: Types::STRING, nullable: true)]
-        private string $authenticationCode
+        private string $authenticationCode,
     ) {
     }
     #[ORM\Column]
@@ -29,6 +30,9 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
      */
     #[ORM\Column]
     private string $password;
+
+    #[ORM\OneToOne(mappedBy: 'User', cascade: ['persist', 'remove'])]
+    private ?Order $orders = null;
 
     public function getId(): string
     {
@@ -100,4 +104,28 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function eraseCredentials(): void
     {
     }
+
+    public function getOrders(): ?Order
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?Order $orders): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($orders === null && $this->orders !== null) {
+            $this->orders->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($orders !== null && $orders->getUser() !== $this) {
+            $orders->setUser($this);
+        }
+
+        $this->orders = $orders;
+
+        return $this;
+    }
+
+    
 }

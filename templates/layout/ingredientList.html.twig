@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div style="margin: 0 auto; text-align: center;">
+		{{ form_start(articleForm) }}
+		{{ form_widget(articleForm.browse_field, {'attr': {'style':'width: 20%; height: 50px; display: inline-block; font-size: 20px;'}}) }}
+		<button type="submit" class="btn btn-danger mb-2 custom-button" style="display: inline-block; height: 50px; font-size: 16px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewbox="0 0 16 16">
+				<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+			</svg>
+		</button>
+
+		{{ form_end(articleForm) }}
+
+
+	</div>
+
+
+	<div class="my-3 text-center">
+		<a href="{{ path('create-product')}}" class="btn btn-danger text-center fs-5">{{'AddProduct'|trans}}</a>
+		<a href="{{ path('create-ingredient')}}" class="btn btn-danger text-center fs-5">{{'AddIngredient'|trans}}</a>
+		<a href="{{ path('list')}}" class="btn btn-danger text-center fs-5">{{'ShowProduct'|trans}}</a>
+	</div>
+
+	<div class="container">
+		<table
+			class="table">
+			<!-- Your table content here -->
+
+			<thead>
+				<tr>
+					<th scope="col" class="col-md-4 text-center fs-5">{{ 'Ingredient'|trans }}</th>
+					<th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNetto'|trans }}</th>
+					<th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBrutto'|trans }}</th>
+					<th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT'|trans }}</th>
+					<th scope="col" class="col-md-4 text-center fs-5">{{ 'Category'|trans }}</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for ingredientFind in ingredient %}
+					<tr>
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ ingredientFind.ingredient }}</span>
+							</div>
+						</td>
+
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ ingredientFind.priceNetto }}</span>
+							</div>
+						</td>
+
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ ingredientFind.priceBrutto }}</span>
+							</div>
+						</td>
+
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ ingredientFind.VAT }}</span>
+							</div>
+						</td>
+
+
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ ingredientFind.category }}</span>
+							</div>
+						</td>
+
+						<td class="col-md-4">
+							<div class="my-3 text-center">
+								<a href="{{ path('editIngredient', {'id': ingredientFind.id}) }}" class="btn btn-danger text-center fs-5">Edit</a>
+							</div>
+						</td>
+
+						<td class="col-md-4">
+							<div class="my-3 text-center fs-5">
+								<a href="{{ path('deleteIngredient', {'id': ingredientFind.id}) }}" class="btn btn-danger text-center fs-5">Delete</a>
+							</div>
+						</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

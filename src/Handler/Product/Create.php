@@ -7,9 +7,10 @@ namespace App\Handler\Product;
 use App\DTO\ProductDTO;
 use App\Entity\Price;
 use App\Entity\Product;
+use App\Handler\Interface\InterfaceCreate;
 use App\Repository\ProductRepository;
 
-class Create
+class Create 
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
@@ -20,9 +21,7 @@ class Create
     {
         $product = new Product(
             name: $dto->name,
-            color: $dto->color,
-            producent: $dto->producent,
-            barcode: $dto->barcode,
+            description: $dto->description,
             imageFile: $dto->imageFile,
             price: $this->createPrice($dto),
         );
@@ -34,9 +33,15 @@ class Create
     private function createPrice(ProductDTO $dto): Price 
     {
         return new Price(
-            priceNetto: $dto->price_netto,
-            priceBrutto: $dto->price_brutto,
-            vat: $dto->vat
+            priceNettoSmall: $dto->priceNettoSmall,
+            priceBruttoSmall: $dto->priceBruttoSmall,
+            vatSmall: $dto->vatSmall,
+            priceNettoMedium: $dto->priceNettoMedium,
+            priceBruttoMedium: $dto->priceBruttoMedium,
+            vatMedium: $dto->vatMedium,
+            priceNettoLarge: $dto->priceNettoLarge,
+            priceBruttoLarge: $dto->priceBruttoLarge,
+            vatLarge: $dto->vatLarge
         );
     }
 }

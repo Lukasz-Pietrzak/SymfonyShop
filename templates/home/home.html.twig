@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
    <link href="{{ asset('styles/menu.css') }}" rel="stylesheet">
-    
+    <link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -17,9 +17,31 @@
         <div id="main-text-div">
             <span id="main-text">Our bestsellers</span>
         </div>
- 
 
-        <div id="main">
+		<div id="main">
+			{% for productFind in products %}
+				<div id="box">
+					<span class="main-pizza-tekst">
+						{{productFind.name}}</span>
+					<br>
+					<img class="main-pizza-image" src="{{ asset('images/products/' ~ productFind.imageName) }}"/>
+
+					<br><br>
+					<div id="div-main-pizza-description">
+						<span class="main-pizza-description"> {{ productFind.description }}</span>
+					</div>
+					<br><br><br>
+				    <span class="add-to-cart"
+          data-productid="{{ productFind.id }}"
+          data-small="{{ productFind.price.priceBruttoSmall|serialize(format = 'json') }}"
+          data-medium="{{ productFind.price.priceBruttoMedium|serialize(format = 'json') }}"
+          data-large="{{ productFind.price.priceBruttoLarge|serialize(format = 'json') }}">Add to cart</span>
+					<br>
+				</div>
+			{% endfor %}
+		</div>
+
+        {# <div id="main">
             <br>
             <br>
             <div id="boxHome">
@@ -34,7 +56,7 @@
                 </span>
             </div>
                 <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
+                <span id="AddToCart" class="add-to-cart">Add to cart</span>
                 <br>
             </div>
             <div id="boxHome">
@@ -50,7 +72,7 @@
                 </div>
                 <span class="main-pizza-description">Lorem ipsum</span>
                 <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
+                <span id="AddToCart" class="add-to-cart">Add to cart</span>
                 <br>
             </div>
             <div id="boxHome">
@@ -66,13 +88,11 @@
                 </div>
                 <span class="main-pizza-description">Lorem ipsum</span>
                 <br><br><br>
-                <span class="add-to-cart">Add to cart</span>
+                <span id="AddToCart" class="add-to-cart">Add to cart</span>
                 <br>
             </div>
-            <script>
+        </div> #}
 
-            </script>
-        </div>
         <br><br><br>
         <div id="bottom">
             <span id="Our-story">Our-story</span>
@@ -90,7 +110,6 @@
         </div>
         
 <br><br><br><br>
-
         <div id="Contact">
             <span id="Contact-us">Contact us</span>
             <br><br>
@@ -99,4 +118,43 @@
         </div>
 
     </div>    
+
+    {% for productFind in products %}
+<div class="js-products-price"
+    data-small="{{ productFind.price.priceBruttoSmall|serialize(format = 'json') }}"
+    data-medium="{{ productFind.price.priceBruttoMedium|serialize(format = 'json') }}"
+    data-large="{{ productFind.price.priceBruttoLarge|serialize(format = 'json') }}"
+>
+</div>
+{% endfor %}
+
+	{% for ingredientFind in ingredients %}
+<div class="js-ingredients"
+    data-ingredient="{{ ingredientFind.ingredient|serialize(format = 'json') }}"
+    data-pricebrutto="{{ ingredientFind.priceBrutto|serialize(format = 'json') }}"
+    data-category="{{ ingredientFind.category|serialize(format = 'json') }}"
+>
+</div>
+  
+  {% endfor %}
+
+    <script src="{{ asset('js/Menu.js') }}">
+
+
+      </script> 
+    {# <script>
+        var ingredients = [
+        {% for ingredient in ingredients %}
+            {
+                ingredient: "{{ ingredient.ingredient }}",
+                priceNetto: {{ ingredient.priceNetto }},
+                priceBrutto: {{ ingredient.priceBrutto }},
+                vat: {{ ingredient.vat }},
+                category: "{{ ingredient.category }}"
+            }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+      
+
+</script> #}
 {% endblock %}

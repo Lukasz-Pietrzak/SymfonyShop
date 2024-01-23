@@ -13,48 +13,115 @@ use Doctrine\ORM\Mapping\Table;
 class Price extends BaseEntity
 {
     public function __construct(
-        #[ORM\Column(type: Types::INTEGER)]
-        private int $priceNetto,
-        #[ORM\Column(type: Types::INTEGER)]
-        private int $priceBrutto,
-        #[ORM\Column(type: Types::INTEGER)]
-        private int $vat,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceNettoSmall = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceBruttoSmall = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $vatSmall = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceNettoMedium = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceBruttoMedium = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $vatMedium = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceNettoLarge = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $priceBruttoLarge = null,
+        #[ORM\Column(type: Types::INTEGER, nullable: true)]
+        private ?int $vatLarge = null,
     ) {
     }
 
-    public function getId(): string
+    public function getPriceNettoSmall(): ?int
     {
-        return $this->id;
+        return $this->priceNettoSmall;
     }
 
-    public function getPriceNetto(): int
+    public function getPriceBruttoSmall(): ?int
     {
-        return $this->priceNetto;
+        return $this->priceBruttoSmall;
     }
 
-    public function getPriceBrutto(): int
+    public function getVatSmall(): ?int
     {
-        return $this->priceBrutto;
+        return $this->vatSmall;
     }
 
-    public function getVat(): int
+    public function getPriceNettoMedium(): ?int
     {
-        return $this->vat;
+        return $this->priceNettoMedium;
     }
 
-    public function setPriceNetto(int $priceNetto): void
+    public function getPriceBruttoMedium(): ?int
     {
-        $this->priceNetto = $priceNetto;
+        return $this->priceBruttoMedium;
     }
 
-    public function setPriceBrutto(int $priceBrutto): void
+    public function getVatMedium(): ?int
     {
-        $this->priceBrutto = $priceBrutto;
+        return $this->vatMedium;
     }
 
-    public function setVat(int $vat): void
+    public function getPriceNettoLarge(): ?int
     {
-        $this->vat = $vat;
+        return $this->priceNettoLarge;
+    }
+
+    public function getPriceBruttoLarge(): ?int
+    {
+        return $this->priceBruttoLarge;
+    }
+
+    public function getVatLarge(): ?int
+    {
+        return $this->vatLarge;
+    }
+
+    public function setPriceNettoSmall(?int $priceNettoSmall): void
+    {
+        $this->priceNettoSmall = $priceNettoSmall;
+    }
+
+    public function setPriceBruttoSmall(?int $priceBruttoSmall): void
+    {
+        $this->priceBruttoSmall = $priceBruttoSmall;
+    }
+
+    public function setVatSmall(?int $vatSmall): void
+    {
+        $this->vatSmall = $vatSmall;
+    }
+
+    public function setPriceNettoMedium(?int $priceNettoMedium): void
+    {
+        $this->priceNettoMedium = $priceNettoMedium;
+    }
+
+    public function setPriceBruttoMedium(?int $priceBruttoMedium): void
+    {
+        $this->priceBruttoMedium = $priceBruttoMedium;
+    }
+
+    public function setVatMedium(?int $vatMedium): void
+    {
+        $this->vatMedium = $vatMedium;
+    }
+
+    public function setPriceNettoLarge(?int $priceNettoLarge): void
+    {
+        $this->priceNettoLarge = $priceNettoLarge;
+    }
+
+    public function setPriceBruttoLarge(?int $priceBruttoLarge): void
+    {
+        $this->priceBruttoLarge = $priceBruttoLarge;
+    }
+
+    public function setVatLarge(?int $vatLarge): void
+    {
+        $this->vatLarge = $vatLarge;
     }
 
 }
