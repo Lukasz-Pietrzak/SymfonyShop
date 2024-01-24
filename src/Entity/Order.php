@@ -81,7 +81,7 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
         return $this->product_id;
     }
 
-    public function addProductId(Product $productId): static
+    public function addProductId( $productId): static
     {
         if (!$this->product_id->contains($productId)) {
             $this->product_id->add($productId);

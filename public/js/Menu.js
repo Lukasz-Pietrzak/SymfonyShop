@@ -5,38 +5,20 @@ const cartIconElement = document.getElementById("cartIcon");
 
 
 let price = 0;
+let productId;
+let priceSave = [];
+let radioSave = false;
+let noSizeChecked;
+let howManyClickPizza = 0;
+// let productPrice = document.querySelector('.js-products-price');
+// let smallPrice = parseInt(small, 10);
+// let productId = this.dataset.productid;
 
-
-addToCartButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      const productId = this.getAttribute("data-productid");
-      const smallPrice = parseInt(JSON.parse(this.getAttribute("data-small")), 10);
-      const mediumPrice = parseInt(JSON.parse(this.getAttribute("data-medium")), 10);
-      const largePrice = parseInt(JSON.parse(this.getAttribute("data-large")), 10);
-  
-      console.log("Kliknięto przycisk Add to cart dla produktu o ID: " + productId);
-      console.log("Cena dla małego: " + smallPrice);
-      console.log("Cena dla średniego: " + mediumPrice);
-      console.log("Cena dla dużego: " + largePrice);
-  
-      // Dodaj tutaj kod obsługi kliknięcia, używając powyższych informacji
-    });
-  });
 
 orderNowButton.addEventListener("click", function(){
     mainTextElement.scrollIntoView({ behavior: 'smooth' });
 });
 
-
-let cartIconCounter = 1;
-
-addToCartButtons.forEach(function(button) {
-    button.addEventListener("click", function () {
-        cartIconElement.innerHTML = cartIconCounter;
-        cartIconElement.style.backgroundColor = "crimson";
-        cartIconCounter++;
-    });
-  });
 
 function howManyIngredientsButton(nazwa, textContent) {
    nazwa.id = "PlusElement"; 
@@ -52,6 +34,8 @@ function howManyIngredientsButton(nazwa, textContent) {
    nazwa.style.cursor = "pointer";
    nazwa.style.color = "white";
 }
+
+
 let addToCart = document.createElement('div');
 addToCart.textContent = "Add to Cart 0 zł";
 let ingredientPrice = 0;
@@ -67,11 +51,12 @@ category = [];
 
 let sizeFlag = false;
 
+let cartPanel;
+
 addToCartButtons.forEach(function(button) {
     button.addEventListener("click", function () {
               // Tworzenie nowego elementu div dla panelu
-      let cartPanel = document.createElement("div");
-   
+    cartPanel = document.createElement("div");
       // Ustawienie wymiarów i stylu panelu
       cartPanel.style.width = "320px";
       cartPanel.style.height = "auto";
@@ -88,15 +73,14 @@ addToCartButtons.forEach(function(button) {
      let titleElement = document.createElement("strong");
       titleElement.textContent = 'Sizes';
       cartPanel.appendChild(titleElement);
+
+productId = this.getAttribute("data-productid");
+let smallPrice = parseInt(JSON.parse(this.getAttribute("data-small")), 10);
+let mediumPrice = parseInt(JSON.parse(this.getAttribute("data-medium")), 10);
+let largePrice = parseInt(JSON.parse(this.getAttribute("data-large")), 10);
+
    
-      let productPrice = document.querySelector('.js-products-price');
-      let small = JSON.parse(productPrice.dataset.small);
-      let sizeSmallInteger = parseInt(small, 10);
-      let medium = JSON.parse(productPrice.dataset.medium);
-      let sizeMediumInteger = parseInt(medium, 10);
-      let large = JSON.parse(productPrice.dataset.large);
-      let sizeLargeInteger = parseInt(large, 10);
-    let sizesLabel = createBootstrapLabel([sizeSmallInteger, sizeMediumInteger, sizeLargeInteger]);
+    let sizesLabel = createBootstrapLabel([smallPrice, mediumPrice, largePrice]);
    
      cartPanel.appendChild(sizesLabel);
         cartPanel.appendChild(separator);
@@ -133,7 +117,6 @@ for (let category in ingredientsByCategory) {
 
     for (let i = 0; i < categoryIngredients.length; i++) {
         let ingredient = categoryIngredients[i];
-        // TODO:
         ingredientFuture = [ingredient.name];
         let sausagesLabel = addIngredient([ingredient.price]);
         cartPanel.appendChild(sausagesLabel);
@@ -158,7 +141,65 @@ for (let category in ingredientsByCategory) {
       overlay.style.justifyContent = "center";
       overlay.style.alignItems = "center";
    
-   
+let numberPizza = 1;
+
+      let howManyPizzaText = document.createElement("strong");
+      howManyPizzaText.textContent = "The number of pizza";
+
+      let howManyPizzaDiv = document.createElement("div");
+      howManyPizzaDiv.style.marginTop = "3%";
+
+      let howManyPizzaButtonPlus = document.createElement("span");
+      howManyIngredientsButton(howManyPizzaButtonPlus, "+");
+
+      howManyPizzaButtonPlus.addEventListener("click", function(){
+
+        // if (radio.checked){
+        //     addToCart.textContent = "dupa";
+        // } 
+
+        // TODO:
+        numberPizza++;
+        if (priceSave.length - 1 !== howManyClickPizza) {
+            // Jeśli jest pusta, dodaj nową wartość jako pierwszy element
+            priceSave.push(priceSave[howManyClickPizza - 1]);
+        }        
+        console.log(priceSave);
+
+        price += priceSave[howManyClickPizza];
+        addToCart.textContent = "Add to cart" + ' ' + price + ' zł';
+        numberOfPizza.textContent = numberPizza;
+        howManyClickPizza++;
+      });
+
+
+      let numberOfPizza = document.createElement("span");
+      numberOfPizza.textContent = numberPizza;
+
+      let howManyPizzaButtonMinus = document.createElement("span");
+      howManyIngredientsButton(howManyPizzaButtonMinus, "-");
+
+
+      howManyPizzaButtonMinus.addEventListener("click", function(){
+        if(numberPizza >= 2){
+            numberPizza--;
+        //             if (priceSave.length - 1 !== howManyClickPizza) {
+        //     // Jeśli jest pusta, dodaj nową wartość jako pierwszy element
+        //     priceSave.push(priceSave[howManyClickPizza - 1]);
+        // } 
+            price -= priceSave[howManyClickPizza - 1];
+            priceSave.pop();
+        console.log(priceSave);
+            addToCart.textContent = "Add to cart" + ' ' + price + ' zł';
+            howManyClickPizza--;
+        }
+        numberOfPizza.textContent = numberPizza;
+      });
+
+      howManyPizzaButtonMinus.style.marginLeft = "4%";
+      
+
+   addToCart.style.marginTop = "5%";
       addToCart.style.backgroundColor = 'crimson';
       addToCart.style.padding = '10px';
       addToCart.style.paddingLeft = '20px';
@@ -168,6 +209,11 @@ for (let category in ingredientsByCategory) {
       addToCart.style.textAlign = 'center';
       addToCart.style.cursor = 'pointer';
 
+      cartPanel.appendChild(howManyPizzaText);
+      cartPanel.appendChild(howManyPizzaDiv);
+      howManyPizzaDiv.appendChild(howManyPizzaButtonPlus);
+      howManyPizzaDiv.appendChild(numberOfPizza);
+      howManyPizzaDiv.appendChild(howManyPizzaButtonMinus);
       cartPanel.appendChild(addToCart);
       // Dodanie panelu do overlaya
       overlay.appendChild(cartPanel);
@@ -183,6 +229,9 @@ for (let category in ingredientsByCategory) {
             sizeCounter = 0;
             price = 0;
             sizeCheck = 0;
+            priceSave = [];
+            howManyClickPizza = 0;
+            sizeFlag = false;
             addToCart.textContent = "Add to cart 0 zł";
             document.body.removeChild(overlay);
          }
@@ -219,13 +268,28 @@ function createBootstrapLabel(options) {
 
     radio.addEventListener("change", function() {
         if (radio.checked) {
+            radioSave = true;
             price -= sizeCheck;
+            // Sprawdź, czy tablica jest pusta
+            if (priceSave.length - 1 !== howManyClickPizza) {
+                // Jeśli jest pusta, dodaj nową wartość jako pierwszy element
+                priceSave.push(0);
+            }
+
+            priceSave[howManyClickPizza] -= sizeCheck;
             sizeCheck = option;
                 price += option;
+                priceSave[howManyClickPizza] += option;
                 dataToDatabase.push(price);
             addToCart.textContent = "Add to cart " + price + " zł";
+            if (cartPanel.contains(noSizeChecked)){
+                cartPanel.removeChild(noSizeChecked);
+            }
+
         } else {
+            radioSave = false;
             price -= option;
+            priceSave[howManyClickPizza] -= option;
             sizeCheck = 0;
             addToCart.textContent = "Add to cart " + price + " zł";
         }
@@ -249,12 +313,25 @@ function createBootstrapLabel(options) {
          radio.checked = !radio.checked;
          if (radio.checked) {
             price -= sizeCheck;
+            if (priceSave.length - 1 !== howManyClickPizza) {
+                // Jeśli jest pusta, dodaj nową wartość jako pierwszy element
+                priceSave.push(0);
+            }
+            // priceSave[howManyClickPizza] -= sizeCheck;
             sizeCheck = option;
                 price += option;
+                priceSave[howManyClickPizza] += option;
+                radioSave = true;
       dataToDatabase.push(price);
             addToCart.textContent = "Add to cart" + ' ' + price + " zł";
+            if (cartPanel.contains(noSizeChecked)){
+                cartPanel.removeChild(noSizeChecked);
+            }
+
         } else {
+            radioSave = false;
             price -= option;
+            priceSave[howManyClickPizza] -= option;
             sizeCheck = 0;
             addToCart.textContent = "Add to cart" + ' ' + price + " zł";
         }
@@ -273,6 +350,11 @@ function addIngredient(options) {
 
        // Przycisk "+" i związane z nim elementy
    let IngredientsButton = document.createElement("span");
+//    let IngredientsButtonMinus = document.createElement("span");
+//    let howManyIngredientsNumber = 0;
+//    let numberIngredient = document.createElement("span");
+
+//    createDynamicButton(IngredientsButton, IngredientsButtonMinus, howManyIngredientsNumber, numberIngredient);
        howManyIngredientsButton(IngredientsButton, "+");
 
        // Licznik ilości składników
@@ -288,10 +370,13 @@ function addIngredient(options) {
        IngredientsButton.addEventListener("click", function() {
            howManyIngredientsNumber++;
            dataToDatabase.push(ingredientFuture[0]);
-           console.log(option);
 
-        //    TODO:
         price += option;
+        if (priceSave.length - 1 !== howManyClickPizza) {
+            // Jeśli jest pusta, dodaj nową wartość jako pierwszy element
+            priceSave.push(0);
+        }
+        priceSave[howManyClickPizza] += option;
         addToCart.textContent = "Add to cart" + ' ' + price + " zł";
 
            if (howManyIngredientsNumber === 1) {
@@ -308,6 +393,7 @@ function addIngredient(options) {
          numberIngredient.textContent = howManyIngredientsNumber;
 
          price -= option;
+         priceSave[howManyClickPizza] -= option;
          addToCart.textContent = "Add to cart" + ' ' + price + " zł";
      
          // Sprawdź, czy liczba składników wynosi 0, zanim usuniesz elementy
@@ -335,22 +421,37 @@ function addIngredient(options) {
    return label;
 }
 
+let cartIconCounter = 1;
+
 
 addToCart.addEventListener("click", function () {
-console.log(dataToDatabase);
-    fetch('/add-to-cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ price: price }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Odpowiedź od serwera:', data);
-    })
-    .catch(error => {
-        console.error('Wystąpił błąd:', error);
-    });
-}
-);
+    if (!radioSave) {
+        noSizeChecked = document.createElement("div");
+        noSizeChecked.textContent = "Please check size";
+        noSizeChecked.style.color = "red";
+        noSizeChecked.style.font = "20px";
+        noSizeChecked.style.textAlign = "center";
+        cartPanel.appendChild(noSizeChecked);
+    } else {
+        cartIconElement.innerHTML = cartIconCounter;
+        cartIconElement.style.backgroundColor = "crimson";
+        cartIconCounter++;
+        // console.log(dataToDatabase);
+
+        fetch('/add-to-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ price, productId }), // Shorthand property names
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Odpowiedź od serwera:', data);
+        })
+        .catch(error => {
+            console.error('Wystąpił błąd:', error);
+        });
+    }
+});
+

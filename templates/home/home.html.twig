@@ -32,7 +32,7 @@
 					</div>
 					<br><br><br>
 				    <span class="add-to-cart"
-          data-productid="{{ productFind.id }}"
+             data-productid="{{ productFind.id|serialize(format = 'json') }}"
           data-small="{{ productFind.price.priceBruttoSmall|serialize(format = 'json') }}"
           data-medium="{{ productFind.price.priceBruttoMedium|serialize(format = 'json') }}"
           data-large="{{ productFind.price.priceBruttoLarge|serialize(format = 'json') }}">Add to cart</span>
@@ -118,15 +118,6 @@
         </div>
 
     </div>    
-
-    {% for productFind in products %}
-<div class="js-products-price"
-    data-small="{{ productFind.price.priceBruttoSmall|serialize(format = 'json') }}"
-    data-medium="{{ productFind.price.priceBruttoMedium|serialize(format = 'json') }}"
-    data-large="{{ productFind.price.priceBruttoLarge|serialize(format = 'json') }}"
->
-</div>
-{% endfor %}
 
 	{% for ingredientFind in ingredients %}
 <div class="js-ingredients"
