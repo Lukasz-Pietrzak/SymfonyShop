@@ -1,22 +1,13 @@
 export { createSizePriceFromDatabase };
 
 class createSizePriceFromDatabase {
-    constructor(RadioEvent, options, sizes, sizeCounter, howManyClickPizza, price, sizeCheck, priceSave, dataToDatabase, cartPanel, addToCart, noSizeChecked, radioSave) {
+    constructor(RadioEvent, options, sizes, sizeCounter) {
         this.RadioEvent = RadioEvent;
         this.options = options;
         this.sizes = sizes;
         this.sizeCounter = sizeCounter;
-        this.howManyClickPizza = howManyClickPizza;
         this.label = document.createElement("div");
         this.label.style.margin = "10px 0";
-        this.price = price;
-        this.sizeCheck = sizeCheck;
-        this.priceSave = priceSave;
-        this.dataToDatabase = dataToDatabase;
-        this.cartPanel = cartPanel;
-        this.addToCart = addToCart;
-        this.noSizeChecked = noSizeChecked;
-        this.radioSave = radioSave;
     }
 
     createSizePrice() {

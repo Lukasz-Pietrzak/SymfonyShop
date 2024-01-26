@@ -92,7 +92,7 @@ Radio = new RadioEvent(
     howManyClickPizza);
 
 
-    sizePriceCreator = new createSizePriceFromDatabase(Radio, [smallPrice, mediumPrice, largePrice], sizes, sizeCounter, howManyClickPizza,price, sizeCheck, priceSave, dataToDatabase, cartPanel, addToCart, noSizeChecked, radioSave);
+    sizePriceCreator = new createSizePriceFromDatabase(Radio, [smallPrice, mediumPrice, largePrice], sizes, sizeCounter);
     let sizesLabel = sizePriceCreator.createSizePrice();
 
    
