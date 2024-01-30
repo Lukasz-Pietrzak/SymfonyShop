@@ -70,5 +70,8 @@ ul {
     font-weight: bold;
     padding: 7px;
     margin-right: -7px;
+}
+
+svg{
     cursor: pointer;
 }

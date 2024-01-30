@@ -1,28 +1,39 @@
 import { createSizePriceFromDatabase } from './createSizePriceFromDatabase.js';
 import { RadioEvent } from './RadioEvent.js';
+import { addIngredient } from './addIngredient.js';
+import { HowManyPizza } from './HowManyPizza.js';
+export {createIngredientButton};
+export {noSizeCheckedFunction};
+export {addButtonPlus};
+export {addButtonMinus};
+
 
 const orderNowButton = document.getElementById("order-now");
 const mainTextElement = document.getElementById("main-text");
 const addToCartButtons = document.querySelectorAll(".add-to-cart");
 const cartIconElement = document.getElementById("cartIcon");
 
+let price = [0];
+let howManyClickPizza = [0];
+let priceSave = [0];
 
-let price = 0;
 let productId;
-let priceSave = 0;
-let radioSave = false;
+let radioSave = [false];
 let noSizeChecked;
-let howManyClickPizza = 0;
 let sizePriceCreator;
 let Radio;
-// let Radio;
+let IngredientClass;
+let overlay = document.createElement("div");
 
-orderNowButton.addEventListener("click", function(){
-    mainTextElement.scrollIntoView({ behavior: 'smooth' });
-});
+if(orderNowButton){
+    orderNowButton.addEventListener("click", function(){
+        mainTextElement.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+}
 
 
-function howManyIngredientsButton(nazwa, textContent) {
+function createIngredientButton(nazwa, textContent) {
    nazwa.id = "PlusElement"; 
    nazwa.textContent = textContent;
    nazwa.style.width = "80px";
@@ -37,6 +48,17 @@ function howManyIngredientsButton(nazwa, textContent) {
    nazwa.style.color = "white";
 }
 
+function addButtonPlus(priceSave, option, price, howManyClickPizza ) {
+    priceSave[0] += option;
+    price[0] = priceSave[0] * (howManyClickPizza[0] + 1);
+    addToCart.textContent = "Add to cart" + " " + price[0] + " zł";
+ }
+
+ function addButtonMinus(priceSave, option, price) {
+    priceSave[0] -= option;
+    price[0] = priceSave[0] * (howManyClickPizza[0] + 1);
+    addToCart.textContent = "Add to cart" + " " + price[0] + " zł";
+ }
 
 let addToCart = document.createElement('div');
 addToCart.textContent = "Add to Cart 0 zł";
@@ -48,6 +70,7 @@ let sizeCounter = 0;
 let ingredientFuture = [];
 let sizeCheck = 0;
 let dataToDatabase = [];
+let ingredientId;
 
 let category = [];
 
@@ -85,7 +108,6 @@ Radio = new RadioEvent(
     price,
     priceSave, 
     sizeCheck, 
-    dataToDatabase, 
     addToCart, 
     cartPanel, 
     noSizeChecked, 
@@ -104,6 +126,7 @@ let ingredientCatchers = document.querySelectorAll('.js-ingredients');
 let ingredientsByCategory = {};
 ingredientCatchers.forEach(function(ingredientCatcher) {
 
+    ingredientId = JSON.parse(ingredientCatcher.dataset.ingredientid);
     let ingredientName = JSON.parse(ingredientCatcher.dataset.ingredient);
     let ingredientPriceBrutto = JSON.parse(ingredientCatcher.dataset.pricebrutto);
     let ingredientPriceBruttoInteger = parseInt(ingredientPriceBrutto, 10);
@@ -115,10 +138,13 @@ ingredientCatchers.forEach(function(ingredientCatcher) {
     }
 
     ingredientsByCategory[ingredientCategory].push({
+        id: ingredientId,
         name: ingredientName,
         price: ingredientPriceBruttoInteger
     });
 });
+
+
 // Now, loop through categories and display ingredients under each category
 for (let category in ingredientsByCategory) {
     let categoryIngredients = ingredientsByCategory[category];
@@ -131,7 +157,17 @@ for (let category in ingredientsByCategory) {
     for (let i = 0; i < categoryIngredients.length; i++) {
         let ingredient = categoryIngredients[i];
         ingredientFuture = [ingredient.name];
-        let sausagesLabel = addIngredient([ingredient.price]);
+        ingredientId = [ingredient.id];
+        
+        IngredientClass = new addIngredient(
+            price,
+            priceSave,
+            howManyClickPizza,
+            dataToDatabase,
+            addToCart
+            );
+        let sausagesLabel = IngredientClass.addIngredient([ingredient.price], ingredientFuture, ingredientId);
+
         cartPanel.appendChild(sausagesLabel);
     }
 
@@ -139,7 +175,6 @@ for (let category in ingredientsByCategory) {
 }
 
       // Tworzenie overlaya
-      let overlay = document.createElement("div");
    
       // Ustawienie stylu overlaya
       overlay.style.position = "fixed";
@@ -154,56 +189,16 @@ for (let category in ingredientsByCategory) {
       overlay.style.justifyContent = "center";
       overlay.style.alignItems = "center";
    
-let numberPizza = 1;
-      let howManyPizzaText = document.createElement("strong");
-      howManyPizzaText.textContent = "The number of pizza";
+      let HowManyPizzaVariable = new HowManyPizza(
+        radioSave,
+        price,
+        priceSave,
+        howManyClickPizza,
+        addToCart,
+        cartPanel
+      );
 
-      let howManyPizzaDiv = document.createElement("div");
-      howManyPizzaDiv.style.marginTop = "3%";
-
-      let howManyPizzaButtonPlus = document.createElement("span");
-      howManyIngredientsButton(howManyPizzaButtonPlus, "+");
-
-      howManyPizzaButtonPlus.addEventListener("click", function(){
-        if(Radio.radioSave == false){
-            noSizeCheckedFunction();
-        }else{
-            numberPizza++;     
-            Radio.price += Radio.priceSave;
-            addToCart.textContent = "Add to cart" + ' ' + Radio.price  + ' zł';
-            numberOfPizza.textContent = numberPizza;
-            Radio.howManyClickPizza++;
-        }
-
-      });
-
-
-      let numberOfPizza = document.createElement("span");
-      numberOfPizza.textContent = numberPizza;
-
-      let howManyPizzaButtonMinus = document.createElement("span");
-      howManyIngredientsButton(howManyPizzaButtonMinus, "-");
-
-
-      howManyPizzaButtonMinus.addEventListener("click", function(){
-        if(Radio.radioSave == false){
-            noSizeCheckedFunction();
-        }else{
-            if(numberPizza >= 2){
-                numberPizza--;
-                Radio.price = Radio.priceSave * (Radio.howManyClickPizza);
-                addToCart.textContent = "Add to cart" + ' ' + Radio.price + ' zł';
-                if(Radio.howManyClickPizza > 0){
-                    Radio.howManyClickPizza--;
-                }
-            }
-            numberOfPizza.textContent = numberPizza;
-        }
-
-      });
-
-      howManyPizzaButtonMinus.style.marginLeft = "4%";
-      
+      HowManyPizzaVariable.HowManyPizzaFunction();
 
    addToCart.style.marginTop = "5%";
       addToCart.style.backgroundColor = 'crimson';
@@ -215,11 +210,6 @@ let numberPizza = 1;
       addToCart.style.textAlign = 'center';
       addToCart.style.cursor = 'pointer';
 
-      cartPanel.appendChild(howManyPizzaText);
-      cartPanel.appendChild(howManyPizzaDiv);
-      howManyPizzaDiv.appendChild(howManyPizzaButtonPlus);
-      howManyPizzaDiv.appendChild(numberOfPizza);
-      howManyPizzaDiv.appendChild(howManyPizzaButtonMinus);
       cartPanel.appendChild(addToCart);
       // Dodanie panelu do overlaya
       overlay.appendChild(cartPanel);
@@ -233,11 +223,12 @@ let numberPizza = 1;
          if (!cartPanel.contains(event.target)) {
             // Usunięcie overlaya i przywórcenie zmiennych do początkowego stanu
             sizeCounter = 0;
-            price = 0;
+            price = [0];
             sizeCheck = 0;
-            priceSave = 0;
-            radioSave = false;
-            howManyClickPizza = 0;
+            priceSave = [0];
+            radioSave = [false];
+            howManyClickPizza = [0];
+            dataToDatabase = [];
             addToCart.textContent = "Add to cart 0 zł";
             document.body.removeChild(overlay);
          }
@@ -255,80 +246,6 @@ function createSeparator() {
    return separator;
 }
 
-function addIngredient(options) {
-   let label = document.createElement("div");
-   label.style.margin = "10px 0";
-
-   options.forEach(function (option) {
-       let formCheck = document.createElement("div");
-
-       // Przycisk "+" i związane z nim elementy
-   let IngredientsButton = document.createElement("span");
-       howManyIngredientsButton(IngredientsButton, "+");
-
-       // Licznik ilości składników
-       let howManyIngredientsNumber = 0;
-       let numberIngredient = document.createElement("span");
-       numberIngredient.style.marginRight = "12px";
-
-       // Przycisk "-" i związane z nim elementy
-       let IngredientsButtonMinus = document.createElement("span");
-       howManyIngredientsButton(IngredientsButtonMinus, "-");
-
-       // Obsługa zdarzenia po kliknięciu "+" (dodawanie)
-       IngredientsButton.addEventListener("click", function() {
-           howManyIngredientsNumber++;
-           dataToDatabase.push(ingredientFuture[0]);
-
-           Radio.priceSave += option;
-           Radio.price = Radio.priceSave * (Radio.howManyClickPizza + 1);
-  
-        // console.log(howManyClickPizza);
-        addToCart.textContent = "Add to cart" + ' ' + Radio.price + " zł";
-
-           if (howManyIngredientsNumber === 1) {
-            formCheck.insertBefore(IngredientsButtonMinus, IngredientsButton);
-            formCheck.insertBefore(numberIngredient, IngredientsButton);
-           }
-
-           numberIngredient.textContent = howManyIngredientsNumber;
-       });
-
-       // Obsługa zdarzenia po kliknięciu "-" (odejmowanie)
-       IngredientsButtonMinus.addEventListener("click", function(event) {
-         howManyIngredientsNumber = Math.max(0, howManyIngredientsNumber - 1);
-         numberIngredient.textContent = howManyIngredientsNumber;
-
-         Radio.priceSave -= option;
-         Radio.price = Radio.priceSave * (Radio.howManyClickPizza + 1);
-         addToCart.textContent = "Add to cart" + ' ' + Radio.price + " zł";
-     
-         // Sprawdź, czy liczba składników wynosi 0, zanim usuniesz elementy
-         if (howManyIngredientsNumber === 0) {
-                 formCheck.removeChild(IngredientsButtonMinus);
-                 formCheck.removeChild(numberIngredient);
-             // Zatrzymaj propagację zdarzenia kliknięcia, aby nie docierało do overlaya
-             event.stopPropagation();
-         }
-     });
-     
-
-       // Utworzenie etykiety składnika
-       let optionLabel = document.createElement("label");
-       optionLabel.textContent = ingredientFuture[0] + ' ' + option + " zł";
-
-       // Dodanie przycisków i etykiety do formCheck
-       formCheck.appendChild(IngredientsButton);
-       formCheck.appendChild(optionLabel);
-
-       // Dodanie formCheck do etykiety
-       label.appendChild(formCheck);
-   });
-
-   return label;
-}
-
-let cartIconCounter = 1;
 
 noSizeChecked = document.createElement("div");
 
@@ -342,21 +259,31 @@ function noSizeCheckedFunction(){
 }
 
 
+let cartIconCounter = parseInt(localStorage.getItem("cartIconCounter")) || 0;
+
+if(cartIconCounter > 0){
+    cartIconElement.innerHTML = cartIconCounter;
+    cartIconElement.style.backgroundColor = "crimson";
+}
+
+
 addToCart.addEventListener("click", function () {
-    if (radioSave == false) {
+    if (radioSave[0] == false) {
         noSizeCheckedFunction();
     } else {
+        //Adding icon for shopping cart
+        cartIconCounter++;
         cartIconElement.innerHTML = cartIconCounter;
         cartIconElement.style.backgroundColor = "crimson";
-        cartIconCounter++;
-        // console.log(dataToDatabase);
+
+        localStorage.setItem("cartIconCounter", cartIconCounter);
 
         fetch('/add-to-cart', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ price, productId }), // Shorthand property names
+            body: JSON.stringify({ price: price[0], productId, howManyClickPizza: howManyClickPizza[0] + 1, dataToDatabase }), // Poprawiono ten fragment
         })
         .then(response => response.json())
         .then(data => {
@@ -365,6 +292,8 @@ addToCart.addEventListener("click", function () {
         .catch(error => {
             console.error('Wystąpił błąd:', error);
         });
+
+  
     }
 });
 

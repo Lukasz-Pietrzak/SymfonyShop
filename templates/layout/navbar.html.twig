@@ -38,5 +38,17 @@
 			</svg>
 		</li>
 
+
 	</ul>
+
+	    <script>
+        // JavaScript
+        const cartIconElement = document.getElementById("cartIcon");
+        let cartIconCounter = parseInt(localStorage.getItem("cartIconCounter")) || 0;
+
+        if (cartIconCounter > 0) {
+            cartIconElement.innerHTML = cartIconCounter;
+            cartIconElement.style.backgroundColor = "crimson";
+        }
+    </script>
 </div>

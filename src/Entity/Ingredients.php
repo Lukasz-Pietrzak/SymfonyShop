@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
@@ -14,18 +16,17 @@ class Ingredients extends BaseEntity
     #[ORM\ManyToOne(inversedBy: 'Ingredient')]
     private ?Order $orders = null;
 
-    public function __construct(
-        #[ORM\Column(type: Types::STRING)]
-        private ?string $ingredient = null,
-        #[ORM\Column(type: Types::INTEGER)]
-        private ?int $priceNetto = null,
-        #[ORM\Column(type: Types::INTEGER)]
-        private ?int $priceBrutto = null,
-        #[ORM\Column(type: Types::INTEGER)]
-        private ?int $VAT = null,
-        #[ORM\Column(type: Types::STRING)]
-        private ?string $category = null,
-    ) {
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'Ingredient')]
+    private Collection $Orders;
+
+    public function __construct(#[ORM\Column(type: Types::STRING)]
+    private ?string $ingredient = null, #[ORM\Column(type: Types::INTEGER)]
+    private ?int $priceNetto = null, #[ORM\Column(type: Types::INTEGER)]
+    private ?int $priceBrutto = null, #[ORM\Column(type: Types::INTEGER)]
+    private ?int $VAT = null, #[ORM\Column(type: Types::STRING)]
+    private ?string $category = null)
+    {
+        $this->Orders = new ArrayCollection();
     }
 
     public function getId(): string
@@ -91,6 +92,25 @@ class Ingredients extends BaseEntity
     public function setOrders(?Order $orders): static
     {
         $this->orders = $orders;
+
+        return $this;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->Orders->contains($order)) {
+            $this->Orders->add($order);
+            $order->addIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->Orders->removeElement($order)) {
+            $order->removeIngredient($this);
+        }
 
         return $this;
     }

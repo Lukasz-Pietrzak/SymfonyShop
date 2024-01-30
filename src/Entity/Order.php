@@ -20,15 +20,20 @@ class Order extends BaseEntity
 #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
 private ?User $User = null;
 
-#[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'order_id')]
-private Collection $product_id;
+#[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'orders')]
+private Collection $Product;
+
+#[ORM\ManyToMany(targetEntity: Ingredients::class, inversedBy: 'Orders')]
+private Collection $Ingredient;
+
 
     public function __construct(#[ORM\Column(type: Types::INTEGER)]
 private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
-   private int $orderPriceBrutto, #[ORM\Column(type: Types::INTEGER)]
-   private int $orderPriceVAT)
+       private int $orderPriceBrutto, #[ORM\Column(type: Types::INTEGER)]
+    private int $orderPriceVAT)
     {
-        $this->product_id = new ArrayCollection();
+        $this->Product = new ArrayCollection();
+        $this->Ingredient = new ArrayCollection();
     }
    
     public function getOrderPriceNetto(): int
@@ -76,23 +81,47 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
     /**
      * @return Collection<int, Product>
      */
-    public function getProductId(): Collection
+    public function getProduct(): Collection
     {
-        return $this->product_id;
+        return $this->Product;
     }
 
-    public function addProductId( $productId): static
+    public function addProduct(Product $product): static
     {
-        if (!$this->product_id->contains($productId)) {
-            $this->product_id->add($productId);
+        if (!$this->Product->contains($product)) {
+            $this->Product->add($product);
         }
 
         return $this;
     }
 
-    public function removeProductId(Product $productId): static
+    public function removeProduct(Product $product): static
     {
-        $this->product_id->removeElement($productId);
+        $this->Product->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingredients>
+     */
+    public function getIngredient(): Collection
+    {
+        return $this->Ingredient;
+    }
+
+    public function addIngredient(Ingredients $ingredient): static
+    {
+        if (!$this->Ingredient->contains($ingredient)) {
+            $this->Ingredient->add($ingredient);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredients $ingredient): static
+    {
+        $this->Ingredient->removeElement($ingredient);
 
         return $this;
     }

@@ -1,37 +1,35 @@
+import { addButtonPlus, addButtonMinus } from "./Menu.js";
 export { RadioEvent };
 
 class RadioEvent {
-    constructor(radioSave, price, priceSave, sizeCheck, dataToDatabase, addToCart, cartPanel, noSizeChecked, howManyClickPizza) {
+    constructor(radioSave, price, priceSave, sizeCheck, addToCart, cartPanel, noSizeChecked, howManyClickPizza) {
         this.radioSave = radioSave;
         this.price = price;
         this.priceSave = priceSave;
         this.sizeCheck = sizeCheck;
-        this.dataToDatabase = dataToDatabase;
         this.addToCart = addToCart;
         this.cartPanel = cartPanel;
         this.noSizeChecked = noSizeChecked;
-        this.howManyClickPizza = howManyClickPizza;
+        this.howManyClickPizza= howManyClickPizza;
     }
 
     createElementEvent(radio, option) {
         if (radio.checked) {
-            this.price -= this.sizeCheck;
-            this.priceSave -= this.sizeCheck;
+            this.price[0] -= this.sizeCheck;
+            this.priceSave[0] -= this.sizeCheck;
             this.sizeCheck = option;
-            this.priceSave += option;
-            this.price = this.priceSave * (this.howManyClickPizza + 1);
-            this.radioSave = true;
-            this.dataToDatabase.push(this.price);
-            this.addToCart.textContent = "Add to cart" + ' ' + this.price + " zł";
+
+            addButtonPlus(this.priceSave, option,this.price,this.howManyClickPizza);
+
+            this.radioSave[0] = true;
             if (this.cartPanel.contains(this.noSizeChecked)) {
                 this.cartPanel.removeChild(this.noSizeChecked);
             }
         } else {
-            this.radioSave = false;
-            this.priceSave -= option;
-            this.price = this.priceSave * (this.howManyClickPizza + 1);
+            this.radioSave[0] = false;
+            addButtonMinus(this.priceSave, option,this.price,this.howManyClickPizza);
+
             this.sizeCheck = 0;
-            this.addToCart.textContent = "Add to cart" + ' ' + this.price + " zł";
         }
     }
 

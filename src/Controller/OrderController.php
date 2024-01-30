@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\Test;
 use App\Handler\Order\createOrder;
+use App\Provider\ProductProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/add-to-cart', name: 'add_to_cart', methods: ['POST'])]
-    public function addToCart(EntityManagerInterface $entityManager, createOrder $createOrder, Request $request): JsonResponse
+    public function addToCart(createOrder $createOrder, Request $request): JsonResponse
     {
         // Odczytaj dane przesłane w żądaniu POST
         $requestData = json_decode($request->getContent(), true);
@@ -29,22 +30,23 @@ class OrderController extends AbstractController
         $priceNetto = $priceBrutto * $VAT;
         $priceVAT = $priceBrutto - $priceNetto;
 
-        $productId = $requestData['productId'];
+        $jsonProductId = $requestData['productId'];
+        
+        $productId = trim($jsonProductId, '"');
 
-//         $order = $entityManager->getRepository(Order::class)->find($requestData['orderId']);
-
-// // Stwórz nowy obiekt Product na podstawie productId (zakładam, że productId jest dostępne w $requestData)
-// $product = $entityManager->getRepository(Product::class)->find($requestData['productId']);
-
+        $howManyClickPizza = $requestData['howManyClickPizza'];
+        $dataToDatabase = $requestData['dataToDatabase'];
 
         $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT);
 
-        $createOrder->create($dto, $productId);
-
-
-        // Tutaj możesz przetworzyć zmienną "price" (np. dodać do koszyka)
+        $createOrder->create($dto, $productId, $dataToDatabase);
 
         // Odpowiedź do klienta
-        return new JsonResponse(['status' => 'success', 'price' => $priceBrutto, 'productId' => $productId]);
+        return new JsonResponse(['status' => 'success',
+         'price' => $priceBrutto,
+          'productId' => $productId,
+           'howManyClickPizza' => $howManyClickPizza,
+           'dataToDatabase' => $dataToDatabase
+        ]);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\DTO\BrowserDTO;
 use App\Form\BrowserFormType;
+use App\Provider\IngredientProvider;
 use App\Provider\ProductProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,9 +22,10 @@ class MenuController extends AbstractController
     {
     }
     #[Route('/menu', name: 'ui_menu')]
-    public function menu_list(Request $request, ProductProvider $productProvider): Response
+    public function menu_list(IngredientProvider $ingredientProvider, Request $request, ProductProvider $productProvider): Response
     {
         $products = $productProvider->loadAll();
+        $ingredients = $ingredientProvider->loadAll();
         $dto = new BrowserDTO();
 
         $form = $this->createForm(BrowserFormType::class, $dto);
@@ -41,7 +43,8 @@ class MenuController extends AbstractController
 
         return $this->render('menu/menu.html.twig', [
             'articleForm' => $form->createView(),
-            'product' => $products,
+            'products' => $products,
+            'ingredients' => $ingredients,
             'message' => 'Search product'
         ]);
     }

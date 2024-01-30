@@ -6,16 +6,21 @@ namespace App\Handler\Order;
 
 use App\DTO\OrderDTO;
 use App\Entity\Order;
+use App\Provider\IngredientProvider;
+use App\Provider\ProductProvider;
 use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class createOrder
 {
     public function __construct(
-        private readonly OrderRepository $orderRepository,
+        private readonly ProductProvider $productProvider,
+        private readonly IngredientProvider $ingredientProvider,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
-    public function create(OrderDTO $dto, $productId): void
+    public function create(OrderDTO $dto, $productId, $dataToDatabase): void
     {
         $order = new Order(
             orderPriceNetto: $dto->orderPriceNetto,
@@ -23,11 +28,30 @@ class createOrder
             orderPriceVAT: $dto->orderPriceVAT,
         );
 
-        // $order->addProductId($productId);
+        $product = $this->productProvider->loadProductById($productId);
+        $product->addOrder($order);
 
-        // $order->addProductId($dto->productId);
+        
+// Zakładam, że $dataToDatabase to tablica
+foreach ($dataToDatabase as $data) {
+    // Sprawdź długość $data przed wywołaniem loadIngredientById
+    $dataLength = strlen($data);
+    
+    // Wywołaj loadIngredientById tylko gdy długość jest większa od zera
+    if ($dataLength > 0) {
+        $ingredient = $this->ingredientProvider->loadIngredientById($data);
+        $ingredient->addOrder($order);
 
-        $this->orderRepository->save($order);
+        // Persistuj ingredient tylko gdy długość jest większa od zera
+        $this->entityManager->persist($ingredient);
+    }
+}
+
+$this->entityManager->persist($order);
+$this->entityManager->persist($product);
+
+$this->entityManager->flush();
+
     }
 
 }

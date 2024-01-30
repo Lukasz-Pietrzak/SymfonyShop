@@ -21,7 +21,7 @@
 	</div>
 	<div id="container">
 		<div id="main">
-			{% for productFind in product %}
+			{% for productFind in products %}
 				<div id="box">
 					<span class="main-pizza-tekst">
 						{{productFind.name}}</span>
@@ -30,14 +30,27 @@
 
 					<br><br>
 					<div id="div-main-pizza-description">
-						<span class="main-pizza-description"> {{ productFind.description }}</span>
+						<span class="main-pizza-description">
+							{{ productFind.description }}</span>
 					</div>
 					<br><br><br>
-					<span class="add-to-cart">Add to cart</span>
+					<span class="add-to-cart" data-productid="{{ productFind.id|serialize(format = 'json') }}" data-small="{{ productFind.price.priceBruttoSmall|serialize(format = 'json') }}" data-medium="{{ productFind.price.priceBruttoMedium|serialize(format = 'json') }}" data-large="{{ productFind.price.priceBruttoLarge|serialize(format = 'json') }}">Add to cart</span>
 					<br>
 				</div>
 			{% endfor %}
 		</div>
 	</div>
 
+		{% for ingredientFind in ingredients %}
+<div class="js-ingredients"
+    data-ingredientid="{{ ingredientFind.id|serialize(format = 'json') }}"
+    data-ingredient="{{ ingredientFind.ingredient|serialize(format = 'json') }}"
+    data-pricebrutto="{{ ingredientFind.priceBrutto|serialize(format = 'json') }}"
+    data-category="{{ ingredientFind.category|serialize(format = 'json') }}"
+>
+</div>
+
+{% endfor %}
+
+	<script type="module" src="{{ asset('js/Menu.js') }}"></script>
 {% endblock %}

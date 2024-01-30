@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+
+		{% block stylesheets %}
+		<link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
+		<link href="{{ asset('styles/adminPanel.css') }}" rel="stylesheet">
+		{% endblock %}
+
 {% block body %}
 
 	<div style="margin: 0 auto; text-align: center;">

@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Entity\Price;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
@@ -17,8 +19,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product extends BaseEntity
 {
-    #[ORM\ManyToOne(inversedBy: 'Product')]
-    private ?Order $orders = null;
+    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'Product')]
+    private Collection $orders;
 
     public function __construct(
         #[ORM\Column(type : Types::STRING)]
@@ -36,8 +38,10 @@ class Product extends BaseEntity
         #[ORM\Column(nullable: true)]
         private ?int $imageSize = null,
         #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null,
-    ) {
+        private ?\DateTimeImmutable $updatedAt = null
+    )
+    {
+        $this->orders = new ArrayCollection();
     }
 
     public function setImageFile(?File $imageFile = null): void
@@ -111,14 +115,29 @@ class Product extends BaseEntity
         $this->description = $description;
     }
 
-    public function getOrders(): ?Order
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function setOrders(?Order $orders): static
+    public function addOrder(Order $order): static
     {
-        $this->orders = $orders;
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            $order->removeProduct($this);
+        }
 
         return $this;
     }

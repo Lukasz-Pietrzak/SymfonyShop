@@ -121,6 +121,7 @@
 
 	{% for ingredientFind in ingredients %}
 <div class="js-ingredients"
+    data-ingredientid="{{ ingredientFind.id|serialize(format = 'json') }}"
     data-ingredient="{{ ingredientFind.ingredient|serialize(format = 'json') }}"
     data-pricebrutto="{{ ingredientFind.priceBrutto|serialize(format = 'json') }}"
     data-category="{{ ingredientFind.category|serialize(format = 'json') }}"
@@ -133,19 +134,4 @@
 
 
       </script> 
-    {# <script>
-        var ingredients = [
-        {% for ingredient in ingredients %}
-            {
-                ingredient: "{{ ingredient.ingredient }}",
-                priceNetto: {{ ingredient.priceNetto }},
-                priceBrutto: {{ ingredient.priceBrutto }},
-                vat: {{ ingredient.vat }},
-                category: "{{ ingredient.category }}"
-            }{% if not loop.last %},{% endif %}
-        {% endfor %}
-    ];
-      
-
-</script> #}
 {% endblock %}
