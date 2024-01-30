@@ -80,10 +80,15 @@ function createSeparator() {
     howManyClickPizza = [0];
     dataToDatabase = [];
     addToCart.textContent = "Add to cart 0 zł";
-    if (cartPanel && overlay.contains(cartPanel) && overlay && document.body.contains(overlay)) {
+    if (overlay.contains(cartPanel)) {
         overlay.removeChild(cartPanel);
-        document.body.removeChild(overlay);
     }
+
+    if(document.body.contains(overlay)) {
+        document.body.removeChild(overlay);
+
+    }
+
     
     
  }
@@ -256,8 +261,8 @@ for (let category in ingredientsByCategory) {
          if (!cartPanel.contains(event.target)) {
             // Usunięcie overlaya i przywórcenie zmiennych do początkowego stanu
 
-            if (afterAddToCart && overlay.contains(afterAddToCart)) {
-                overlay.removeChild(afterAddToCart);
+            if (afterAddToCart && document.body.contains(afterAddToCart)) {
+                document.body.removeChild(afterAddToCart);
             }
            deleteData();
          }
@@ -319,10 +324,11 @@ addToCart.addEventListener("click", function () {
 
         setTimeout(function() {
             if (cartPanel && overlay.contains(cartPanel) && overlay && document.body.contains(overlay)) {
-                overlay.removeChild(cartPanel);
+            overlay.removeChild(cartPanel);
+            // document.body.removeChild(overlay);
 
             }
-          }, 2000);
+          }, 1000);
 
           
 afterAddToCart = document.createElement('div');
@@ -388,7 +394,7 @@ ContinueShopping.addEventListener('mouseover', function() {
   });
 
   ContinueShopping.addEventListener('click', function() {
-    overlay.removeChild(afterAddToCart);
+    document.body.removeChild(afterAddToCart);
     deleteData();
   });
 
@@ -402,8 +408,8 @@ afterAddToCart.appendChild(divAfterAddToCart);
 
 
 setTimeout(function() {
-    overlay.appendChild(afterAddToCart);
-  }, 600);
+    document.body.appendChild(afterAddToCart);
+  }, 1000);
 
     }
 });
