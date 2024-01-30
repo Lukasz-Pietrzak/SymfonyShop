@@ -24,6 +24,7 @@ let sizePriceCreator;
 let Radio;
 let IngredientClass;
 let overlay = document.createElement("div");
+let afterAddToCart;
 
 if(orderNowButton){
     orderNowButton.addEventListener("click", function(){
@@ -31,6 +32,7 @@ if(orderNowButton){
     });
     
 }
+let cartPanel;
 
 
 function createIngredientButton(nazwa, textContent) {
@@ -60,6 +62,32 @@ function addButtonPlus(priceSave, option, price, howManyClickPizza ) {
     addToCart.textContent = "Add to cart" + " " + price[0] + " zł";
  }
 
+// Funkcja tworząca separator (szarą kreskę)
+function createSeparator() {
+    let separator = document.createElement("div");
+    separator.style.height = "1px";
+    separator.style.backgroundColor = "#ccc"; // Szary kolor
+    separator.style.margin = "10px 0";
+    return separator;
+ }
+
+ function deleteData(){
+    sizeCounter = 0;
+    price = [0];
+    sizeCheck = 0;
+    priceSave = [0];
+    radioSave = [false];
+    howManyClickPizza = [0];
+    dataToDatabase = [];
+    addToCart.textContent = "Add to cart 0 zł";
+    if (cartPanel && overlay.contains(cartPanel) && overlay && document.body.contains(overlay)) {
+        overlay.removeChild(cartPanel);
+        document.body.removeChild(overlay);
+    }
+    
+    
+ }
+
 let addToCart = document.createElement('div');
 addToCart.textContent = "Add to Cart 0 zł";
 let ingredientPrice = 0;
@@ -75,7 +103,17 @@ let ingredientId;
 let category = [];
 
 
-let cartPanel;
+function createButton(nazwa){
+    nazwa.style.marginTop = "5%";
+    nazwa.style.backgroundColor = 'crimson';
+    nazwa.style.padding = '10px';
+    nazwa.style.paddingLeft = '20px';
+    nazwa.style.paddingRight = '20px';
+    nazwa.style.color = 'white';
+    nazwa.style.fontSize = '20px';
+    nazwa.style.textAlign = 'center';
+    nazwa.style.cursor = 'pointer';
+  }
 
 addToCartButtons.forEach(function(button) {
     button.addEventListener("click", function () {
@@ -200,15 +238,10 @@ for (let category in ingredientsByCategory) {
 
       HowManyPizzaVariable.HowManyPizzaFunction();
 
-   addToCart.style.marginTop = "5%";
-      addToCart.style.backgroundColor = 'crimson';
-      addToCart.style.padding = '10px';
-      addToCart.style.paddingLeft = '20px';
-      addToCart.style.paddingRight = '20px';
-      addToCart.style.color = 'white';
-      addToCart.style.fontSize = '20px';
-      addToCart.style.textAlign = 'center';
-      addToCart.style.cursor = 'pointer';
+ 
+
+      createButton(addToCart);
+
 
       cartPanel.appendChild(addToCart);
       // Dodanie panelu do overlaya
@@ -222,29 +255,18 @@ for (let category in ingredientsByCategory) {
          // Sprawdzenie czy kliknięcie nastąpiło poza panelem
          if (!cartPanel.contains(event.target)) {
             // Usunięcie overlaya i przywórcenie zmiennych do początkowego stanu
-            sizeCounter = 0;
-            price = [0];
-            sizeCheck = 0;
-            priceSave = [0];
-            radioSave = [false];
-            howManyClickPizza = [0];
-            dataToDatabase = [];
-            addToCart.textContent = "Add to cart 0 zł";
-            document.body.removeChild(overlay);
+
+            if (afterAddToCart && overlay.contains(afterAddToCart)) {
+                overlay.removeChild(afterAddToCart);
+            }
+           deleteData();
          }
       });
    
     });
   });
 
-// Funkcja tworząca separator (szarą kreskę)
-function createSeparator() {
-   let separator = document.createElement("div");
-   separator.style.height = "1px";
-   separator.style.backgroundColor = "#ccc"; // Szary kolor
-   separator.style.margin = "10px 0";
-   return separator;
-}
+
 
 
 noSizeChecked = document.createElement("div");
@@ -293,7 +315,96 @@ addToCart.addEventListener("click", function () {
             console.error('Wystąpił błąd:', error);
         });
 
-  
+        cartPanel.classList.add('slideUpAnimation');
+
+        setTimeout(function() {
+            if (cartPanel && overlay.contains(cartPanel) && overlay && document.body.contains(overlay)) {
+                overlay.removeChild(cartPanel);
+
+            }
+          }, 2000);
+
+          
+afterAddToCart = document.createElement('div');
+afterAddToCart.style.position = "fixed";
+afterAddToCart.style.top = "50%";
+afterAddToCart.style.left = "50%";
+afterAddToCart.style.transform = "translate(-50%, -50%)";
+afterAddToCart.style.width = "650px";
+afterAddToCart.style.height = "200px";
+afterAddToCart.style.backgroundColor = "white"; // Przezroczyste tło czarne
+
+// Ustawienie stylu dla wyśrodkowania panelu
+afterAddToCart.style.display = "flex";
+afterAddToCart.style.flexDirection = "column"; // Ustawienie flex-direction na column
+afterAddToCart.style.justifyContent = "center";
+afterAddToCart.style.alignItems = "center";
+afterAddToCart.style.borderRadius = "20px";
+
+let informationAboutAdded = document.createElement("div");
+informationAboutAdded.textContent = "Product has been successfully added to the shopping cart";
+informationAboutAdded.style.color = "black";
+informationAboutAdded.style.fontSize = "20px";
+informationAboutAdded.style.marginBottom = "5px";
+
+let separator = createSeparator();
+
+let divAfterAddToCart = document.createElement("div");
+
+let goToShoppingCart = document.createElement("span");
+createButton(goToShoppingCart);
+goToShoppingCart.textContent = "Go to shopping cart";
+goToShoppingCart.style.fontSize = "20px";
+goToShoppingCart.style.padding = "15px";
+
+goToShoppingCart.addEventListener('mouseover', function() {
+    // Zmiana koloru tła na ciemniejszy po najechaniu myszką
+    goToShoppingCart.style.backgroundColor = '#e80000';
+  });
+
+  goToShoppingCart.addEventListener('mouseout', function() {
+    // Przywrócenie pierwotnego koloru tła po opuszczeniu myszki
+    goToShoppingCart.style.backgroundColor = 'crimson';
+  });
+
+
+
+let ContinueShopping = document.createElement("span");
+
+createButton(ContinueShopping);
+ContinueShopping.textContent = "Continue shopping"
+ContinueShopping.style.marginLeft = "20px";
+ContinueShopping.style.fontSize = "20px";
+ContinueShopping.style.padding = "15px";
+
+ContinueShopping.addEventListener('mouseover', function() {
+    // Zmiana koloru tła na ciemniejszy po najechaniu myszką
+    ContinueShopping.style.backgroundColor = '#e80000';
+  });
+
+  ContinueShopping.addEventListener('mouseout', function() {
+    // Przywrócenie pierwotnego koloru tła po opuszczeniu myszki
+    ContinueShopping.style.backgroundColor = 'crimson';
+  });
+
+  ContinueShopping.addEventListener('click', function() {
+    overlay.removeChild(afterAddToCart);
+    deleteData();
+  });
+
+afterAddToCart.appendChild(informationAboutAdded);
+afterAddToCart.appendChild(separator);
+
+divAfterAddToCart.appendChild(goToShoppingCart);
+divAfterAddToCart.appendChild(ContinueShopping);
+
+afterAddToCart.appendChild(divAfterAddToCart);
+
+
+setTimeout(function() {
+    overlay.appendChild(afterAddToCart);
+  }, 600);
+
     }
 });
 
