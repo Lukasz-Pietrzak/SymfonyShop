@@ -20,20 +20,19 @@ class Order extends BaseEntity
 #[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
 private ?User $User = null;
 
-#[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'orders')]
-private Collection $Product;
+#[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
+private Collection $orderIngredients;
 
-#[ORM\ManyToMany(targetEntity: Ingredients::class, inversedBy: 'Orders')]
-private Collection $Ingredient;
-
+#[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class, orphanRemoval: true)]
+private Collection $orderProducts;
 
     public function __construct(#[ORM\Column(type: Types::INTEGER)]
 private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
-       private int $orderPriceBrutto, #[ORM\Column(type: Types::INTEGER)]
-    private int $orderPriceVAT)
+           private int $orderPriceBrutto, #[ORM\Column(type: Types::INTEGER)]
+ private int $orderPriceVAT)
     {
-        $this->Product = new ArrayCollection();
-        $this->Ingredient = new ArrayCollection();
+        $this->orderIngredients = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
    
     public function getOrderPriceNetto(): int
@@ -78,50 +77,63 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
+
+        /**
+     * @return Collection<int, OrderIngredient>
      */
-    public function getProduct(): Collection
+    public function getOrderIngredients(): Collection
     {
-        return $this->Product;
+        return $this->orderIngredients;
     }
 
-    public function addProduct(Product $product): static
+    public function addOrderIngredient(OrderIngredient $orderIngredient): static
     {
-        if (!$this->Product->contains($product)) {
-            $this->Product->add($product);
+        if (!$this->orderIngredients->contains($orderIngredient)) {
+            $this->orderIngredients->add($orderIngredient);
+            $orderIngredient->setOrder($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeOrderIngredient(OrderIngredient $orderIngredient): static
     {
-        $this->Product->removeElement($product);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Ingredients>
-     */
-    public function getIngredient(): Collection
-    {
-        return $this->Ingredient;
-    }
-
-    public function addIngredient(Ingredients $ingredient): static
-    {
-        if (!$this->Ingredient->contains($ingredient)) {
-            $this->Ingredient->add($ingredient);
+        if ($this->orderIngredients->removeElement($orderIngredient)) {
+            // set the owning side to null (unless already changed)
+            if ($orderIngredient->getOrder() === $this) {
+                $orderIngredient->setOrder($this);
+            }
         }
 
         return $this;
     }
 
-    public function removeIngredient(Ingredients $ingredient): static
+    /**
+     * @return Collection<int, OrderProduct>
+     */
+    public function getOrderProducts(): Collection
     {
-        $this->Ingredient->removeElement($ingredient);
+        return $this->orderProducts;
+    }
+
+    public function addOrderProduct(OrderProduct $orderProduct): static
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+            $orderProduct->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProduct $orderProduct): static
+    {
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getOrders() === $this) {
+                $orderProduct->setOrders(null);
+            }
+        }
 
         return $this;
     }

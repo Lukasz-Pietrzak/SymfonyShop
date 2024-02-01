@@ -24,18 +24,20 @@ class createSizePriceFromDatabase {
 
             let optionLabel = document.createElement("label");
 
-            this.RadioEvent.createRadioEvent(radio, option);
 
             optionLabel.classList.add("form-check-label");
             optionLabel.textContent = this.sizes[this.sizeCounter] + ' ' + option + " zł";
-            this.sizeCounter++;
+
+            this.RadioEvent.createRadioEvent(radio, option, this.sizes[this.sizeCounter]);
 
             formCheck.appendChild(radio);
             formCheck.appendChild(optionLabel);
 
             this.label.appendChild(formCheck);
 
-            this.RadioEvent.createLabelEvent(optionLabel, radio, option);
+            this.RadioEvent.createLabelEvent(optionLabel, radio, option,this.sizes[this.sizeCounter] );
+            this.sizeCounter++;
+
         });
 
         return this.label;

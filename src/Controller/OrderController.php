@@ -37,9 +37,13 @@ class OrderController extends AbstractController
         $howManyClickPizza = $requestData['howManyClickPizza'];
         $dataToDatabase = $requestData['dataToDatabase'];
 
+        $sizeSave = $requestData['sizeSave'];
+
+        $user = $this->getUser();
+
         $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT);
 
-        $createOrder->create($dto, $productId, $dataToDatabase);
+        $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
 
         // Odpowiedź do klienta
         return new JsonResponse(['status' => 'success',

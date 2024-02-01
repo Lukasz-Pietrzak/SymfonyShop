@@ -41,10 +41,7 @@ class ProductProvider
 
     }
 
-
-
-
-    public function loadAll():array 
+    public function loadAll(): array 
     {
         $products = $this->productQueryRepository->findAll();
         

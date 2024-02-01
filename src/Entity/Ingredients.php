@@ -13,11 +13,10 @@ use Doctrine\ORM\Mapping\Table;
 #[ORM\Entity()]
 class Ingredients extends BaseEntity
 {
-    #[ORM\ManyToOne(inversedBy: 'Ingredient')]
-    private ?Order $orders = null;
 
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'Ingredient')]
-    private Collection $Orders;
+
+    #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
+    private Collection $orderIngredients;
 
     public function __construct(#[ORM\Column(type: Types::STRING)]
     private ?string $ingredient = null, #[ORM\Column(type: Types::INTEGER)]
@@ -26,7 +25,7 @@ class Ingredients extends BaseEntity
     private ?int $VAT = null, #[ORM\Column(type: Types::STRING)]
     private ?string $category = null)
     {
-        $this->Orders = new ArrayCollection();
+        $this->orderIngredients = new ArrayCollection();
     }
 
     public function getId(): string
@@ -84,34 +83,35 @@ class Ingredients extends BaseEntity
         $this->category = $category;
     }
 
-    public function getOrders(): ?Order
+    /**
+     * @return Collection<int, OrderIngredient>
+     */
+    public function getOrderIngredients(): Collection
     {
-        return $this->orders;
+        return $this->orderIngredients;
     }
 
-    public function setOrders(?Order $orders): static
+    public function addOrderIngredient(OrderIngredient $orderIngredient): static
     {
-        $this->orders = $orders;
-
-        return $this;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->Orders->contains($order)) {
-            $this->Orders->add($order);
-            $order->addIngredient($this);
+        if (!$this->orderIngredients->contains($orderIngredient)) {
+            $this->orderIngredients->add($orderIngredient);
+            $orderIngredient->setIngredient($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeOrderIngredient(OrderIngredient $orderIngredient): static
     {
-        if ($this->Orders->removeElement($order)) {
-            $order->removeIngredient($this);
+        if ($this->orderIngredients->removeElement($orderIngredient)) {
+            // set the owning side to null (unless already changed)
+            if ($orderIngredient->getIngredient() === $this) {
+                $orderIngredient->setIngredient($this);
+            }
         }
 
         return $this;
     }
+    
+
 }

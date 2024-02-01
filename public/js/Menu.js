@@ -25,6 +25,7 @@ let Radio;
 let IngredientClass;
 let overlay = document.createElement("div");
 let afterAddToCart;
+let sizeSave = [''];
 
 if(orderNowButton){
     orderNowButton.addEventListener("click", function(){
@@ -154,7 +155,8 @@ Radio = new RadioEvent(
     addToCart, 
     cartPanel, 
     noSizeChecked, 
-    howManyClickPizza);
+    howManyClickPizza,
+    sizeSave);
 
 
     sizePriceCreator = new createSizePriceFromDatabase(Radio, [smallPrice, mediumPrice, largePrice], sizes, sizeCounter);
@@ -310,7 +312,7 @@ addToCart.addEventListener("click", function () {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ price: price[0], productId, howManyClickPizza: howManyClickPizza[0] + 1, dataToDatabase }), // Poprawiono ten fragment
+            body: JSON.stringify({ price: price[0], productId, howManyClickPizza: howManyClickPizza[0] + 1, dataToDatabase, sizeSave: sizeSave[0] }), // Poprawiono ten fragment
         })
         .then(response => response.json())
         .then(data => {
@@ -351,9 +353,8 @@ let informationAboutAdded = document.createElement("div");
 informationAboutAdded.textContent = "Product has been successfully added to the shopping cart";
 informationAboutAdded.style.color = "black";
 informationAboutAdded.style.fontSize = "20px";
-informationAboutAdded.style.marginBottom = "5px";
+informationAboutAdded.style.marginBottom = "27px";
 
-let separator = createSeparator();
 
 let divAfterAddToCart = document.createElement("div");
 
@@ -399,7 +400,6 @@ ContinueShopping.addEventListener('mouseover', function() {
   });
 
 afterAddToCart.appendChild(informationAboutAdded);
-afterAddToCart.appendChild(separator);
 
 divAfterAddToCart.appendChild(goToShoppingCart);
 divAfterAddToCart.appendChild(ContinueShopping);
@@ -413,4 +413,3 @@ setTimeout(function() {
 
     }
 });
-

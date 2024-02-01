@@ -19,29 +19,23 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product extends BaseEntity
 {
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'Product')]
-    private Collection $orders;
 
-    public function __construct(
-        #[ORM\Column(type : Types::STRING)]
-        private string $name,
-        #[ORM\Column(type: Types::TEXT)]
-        private string $description,
-        #[ORM\OneToOne(targetEntity: Price::class, cascade: ["persist", "remove"], orphanRemoval: true)]
-        private Price $price,
-        // #[ORM\OneToOne(targetEntity: Ingredients::class, cascade: ["persist", "remove"], orphanRemoval: true)]
-        // private Ingredients $ingredients,
-        #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
-        private ?File $imageFile = null,
-        #[ORM\Column(nullable: true)]
-        private ?string $imageName = null,
-        #[ORM\Column(nullable: true)]
-        private ?int $imageSize = null,
-        #[ORM\Column(nullable: true)]
-        private ?\DateTimeImmutable $updatedAt = null
-    )
+    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: OrderProduct::class, orphanRemoval: true)]
+    private Collection $orderProducts;
+
+    // #[ORM\OneToOne(mappedBy: 'Product', cascade: ['persist', 'remove'])]
+    // private ?OrderProduct $orderProduct = null;
+
+    public function __construct(#[ORM\Column(type : Types::STRING)]
+    private string $name, #[ORM\Column(type: Types::TEXT)]
+    private string $description, #[ORM\OneToOne(targetEntity: Price::class, cascade: ["persist", "remove"], orphanRemoval: true)]
+    private Price $price, #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
+    private ?File $imageFile = null, #[ORM\Column(nullable: true)]
+    private ?string $imageName = null, #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null, #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null)
     {
-        $this->orders = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
 
     public function setImageFile(?File $imageFile = null): void
@@ -115,28 +109,48 @@ class Product extends BaseEntity
         $this->description = $description;
     }
 
+    // public function getOrderProduct(): ?OrderProduct
+    // {
+    //     return $this->orderProduct;
+    // }
+
+    // public function setOrderProduct(OrderProduct $orderProduct): static
+    // {
+    //     // set the owning side of the relation if necessary
+    //     if ($orderProduct->getProduct() !== $this) {
+    //         $orderProduct->setProduct($this);
+    //     }
+
+    //     $this->orderProduct = $orderProduct;
+
+    //     return $this;
+    // }
+
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, OrderProduct>
      */
-    public function getOrders(): Collection
+    public function getOrderProducts(): Collection
     {
-        return $this->orders;
+        return $this->orderProducts;
     }
 
-    public function addOrder(Order $order): static
+    public function addOrderProduct(OrderProduct $orderProduct): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->addProduct($this);
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+            $orderProduct->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeOrderProduct(OrderProduct $orderProduct): static
     {
-        if ($this->orders->removeElement($order)) {
-            $order->removeProduct($this);
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getProduct() === $this) {
+                $orderProduct->setProduct(null);
+            }
         }
 
         return $this;
