@@ -29,7 +29,9 @@ class createOrder
             orderPriceVAT: $dto->orderPriceVAT,
         );
 
-        $order->setUser($user);
+        if($user !== null){
+            $order->setUser($user);
+        }
 
         $product = $this->productProvider->loadProductById($productId);
 
@@ -40,23 +42,23 @@ class createOrder
         $orderProduct->setSize($sizeSave);
 
 
-//         foreach ($dataToDatabase as $data) {
-//     // Sprawdź długość $data przed wywołaniem loadIngredientById
-//     $dataLength = strlen($data);
+        foreach ($dataToDatabase as $data) {
+    // Sprawdź długość $data przed wywołaniem loadIngredientById
+    $dataLength = strlen($data);
 
-//     // Wywołaj loadIngredientById tylko gdy długość jest większa od zera
-//     if ($dataLength > 0) {
-//         $ingredient = $this->ingredientProvider->loadIngredientById($data);
-//         $orderIngredient = new OrderIngredient();
-//         $orderIngredient->setIngredient($ingredient);
-//         $orderIngredient->setOrder($order);
-//         $orderIngredient->setQuantity(1);
+    // Wywołaj loadIngredientById tylko gdy długość jest większa od zera
+    if ($dataLength > 0) {
+        $ingredient = $this->ingredientProvider->loadIngredientById($data);
+        $orderIngredient = new OrderIngredient();
+        $orderIngredient->setIngredient($ingredient);
+        $orderIngredient->setOrder($order);
+        $orderIngredient->setQuantity(1);
 
-//         // Persistuj ingredient tylko gdy długość jest większa od zera
-//         // $order->addOrderIngredient($orderIngredient);
-//         $this->entityManager->persist($orderIngredient);
-//     }
-// }
+        // Persistuj ingredient tylko gdy długość jest większa od zera
+        // $order->addOrderIngredient($orderIngredient);
+        $this->entityManager->persist($orderIngredient);
+    }
+}
 
 
         $this->entityManager->persist($order);

@@ -17,14 +17,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Order extends BaseEntity
 {
 
-#[ORM\OneToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
-private ?User $User = null;
 
 #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
 private Collection $orderIngredients;
 
 #[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class, orphanRemoval: true)]
 private Collection $orderProducts;
+
+#[ORM\ManyToOne]
+private ?User $User = null;
 
     public function __construct(#[ORM\Column(type: Types::INTEGER)]
 private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
@@ -64,19 +65,6 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
     {
         $this->orderPriceVAT = $orderPriceVAT;
     }
-
-    public function getUser(): ?User
-    {
-        return $this->User;
-    }
-
-    public function setUser(?User $User): static
-    {
-        $this->User = $User;
-
-        return $this;
-    }
-
 
         /**
      * @return Collection<int, OrderIngredient>
@@ -134,6 +122,18 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
                 $orderProduct->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }
