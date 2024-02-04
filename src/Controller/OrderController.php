@@ -3,12 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\OrderDTO;
-use App\Entity\Order;
-use App\Entity\Product;
-use App\Entity\Test;
 use App\Handler\Order\createOrder;
-use App\Provider\ProductProvider;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +36,7 @@ class OrderController extends AbstractController
 
         $user = $this->getUser();
 
-        $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT);
+        $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT, $user);
 
         $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
 
@@ -53,4 +48,18 @@ class OrderController extends AbstractController
            'dataToDatabase' => $dataToDatabase
         ]);
     }
+
+    #[Route('/shopping-cart', name: 'shopping_cart')]
+    public function shoppingCart(): Response
+    {
+
+        $user = $this->getUser();
+
+        return $this->render('shoppingCart.html.twig', [
+        ]);
+
+    }
+
+
+
 }

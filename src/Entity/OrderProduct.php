@@ -8,69 +8,68 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: OrderProductRepository::class)]
 class OrderProduct extends BaseEntity
 {
-    #[ORM\Column]
-    private int $Quantity;
-
- 
-
-    #[ORM\Column(length: 20)]
-    private string $Size;
-
-    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Product $Product = null;
-
-    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $Orders = null;
+    public function __construct(
+        #[ORM\Column]
+        private int $amountProducts,
+        #[ORM\Column(length: 20)]
+        private string $size,
+        #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+        #[ORM\JoinColumn(nullable: false)]
+        private ?Product $product = null,
+        #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+        #[ORM\JoinColumn(nullable: false)]
+        private ?Order $orders = null
+        ) {
+        
+    }
 
     public function getId(): string
     {
         return $this->id;
     }
 
-    public function getQuantity(): int
+    public function getAmountProducts(): int
     {
-        return $this->Quantity;
+        return $this->amountProducts;
     }
 
-    public function setQuantity(int $Quantity): void
+    public function setAmountProducts(int $amountProducts): void
     {
-        $this->Quantity = $Quantity;
+        $this->amountProducts = $amountProducts;
 
     }
 
     public function getSize(): string
     {
-        return $this->Size;
+        return $this->size;
     }
 
-    public function setSize(string $Size): void
+    public function setSize(string $size): void
     {
-        $this->Size = $Size;
+        $this->size = $size;
 
     }
 
     public function getProduct(): ?Product
     {
-        return $this->Product;
+        return $this->product;
     }
 
-    public function setProduct(?Product $Product): static
+    public function setProduct(?Product $product): static
     {
-        $this->Product = $Product;
+        $this->product = $product;
 
         return $this;
     }
 
     public function getOrders(): ?Order
     {
-        return $this->Orders;
+        return $this->orders;
     }
 
-    public function setOrders(?Order $Orders): static
+    public function setOrders(?Order $orders): static
     {
-        $this->Orders = $Orders;
+        $this->orders = $orders;
 
         return $this;
     }

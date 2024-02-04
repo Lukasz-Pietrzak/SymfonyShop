@@ -2,40 +2,43 @@
 
 namespace App\Entity;
 
-use App\Repository\UserAuthenticationRepository;
-use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Table('orders')]
 #[ORM\Entity()]
 class Order extends BaseEntity
 {
 
+    #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
+    private Collection $orderIngredients;
 
-#[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
-private Collection $orderIngredients;
+    #[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class, orphanRemoval: true)]
+    private Collection $orderProducts;
 
-#[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class, orphanRemoval: true)]
-private Collection $orderProducts;
 
-#[ORM\ManyToOne]
-private ?User $User = null;
-
-    public function __construct(#[ORM\Column(type: Types::INTEGER)]
-private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
-           private int $orderPriceBrutto, #[ORM\Column(type: Types::INTEGER)]
- private int $orderPriceVAT)
-    {
+    public function __construct(
+        #[ORM\Column(type: Types::INTEGER)]
+        private int $orderPriceNetto,
+         #[ORM\Column(type: Types::INTEGER)]
+        private int $orderPriceBrutto,
+         #[ORM\Column(type: Types::INTEGER)]
+        private int $orderPriceVAT,
+        #[ORM\ManyToOne]
+        private ?User $user = null
+        ) {
         $this->orderIngredients = new ArrayCollection();
         $this->orderProducts = new ArrayCollection();
     }
-   
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
     public function getOrderPriceNetto(): int
     {
         return $this->orderPriceNetto;
@@ -66,7 +69,7 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
         $this->orderPriceVAT = $orderPriceVAT;
     }
 
-        /**
+    /**
      * @return Collection<int, OrderIngredient>
      */
     public function getOrderIngredients(): Collection
@@ -128,14 +131,15 @@ private int $orderPriceNetto, #[ORM\Column(type: Types::INTEGER)]
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
+
 
 }

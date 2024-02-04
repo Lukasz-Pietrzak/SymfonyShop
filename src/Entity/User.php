@@ -31,8 +31,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     #[ORM\Column]
     private string $password;
 
-    #[ORM\OneToOne(mappedBy: 'User', cascade: ['persist', 'remove'])]
-    private ?Order $orders = null;
+
 
     public function getId(): string
     {
@@ -103,28 +102,6 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
      */
     public function eraseCredentials(): void
     {
-    }
-
-    public function getOrders(): ?Order
-    {
-        return $this->orders;
-    }
-
-    public function setOrders(?Order $orders): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($orders === null && $this->orders !== null) {
-            $this->orders->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($orders !== null && $orders->getUser() !== $this) {
-            $orders->setUser($this);
-        }
-
-        $this->orders = $orders;
-
-        return $this;
     }
 
     

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\DTO;
 
 use App\Entity\Order;
+use App\Entity\User;
+use Doctrine\Common\Collections\Collection;
 
 class OrderDTO
 {
@@ -13,7 +15,7 @@ class OrderDTO
         public int $orderPriceNetto,
         public int $orderPriceBrutto,
         public int $orderPriceVAT,
-        // public string $productId
+        public ?User $user = null,
     ){
 
     }

@@ -10,17 +10,16 @@ use Doctrine\ORM\Mapping\Table;
 #[ORM\Entity(repositoryClass: OrderIngredientRepository::class)]
 class OrderIngredient extends BaseEntity
 {
-    #[ORM\Column]
-    private int $Quantity;
-
-    #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
-    private Ingredients $Ingredient;
-
-    #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
-    private Order $order;
-
-    public function __construct()
+    public function __construct(
+        #[ORM\Column]
+        private int $amountIngredient,
+        #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
+        private Ingredients $Ingredient,
+        #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
+        private Order $order
+    )
     {
+
     }
 
     public function getId(): string
@@ -29,14 +28,14 @@ class OrderIngredient extends BaseEntity
     }
 
 
-    public function getQuantity(): int
+    public function getAmountIngredient(): int
     {
-        return $this->Quantity;
+        return $this->amountIngredient;
     }
 
-    public function setQuantity(int $Quantity): void
+    public function setAmountIngredient(int $amountIngredient): void
     {
-        $this->Quantity = $Quantity;
+        $this->amountIngredient = $amountIngredient;
 
     }
 
