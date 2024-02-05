@@ -21,27 +21,30 @@ class createOrderIngredients
         $amountOfIngredients = 1;
 
         $processedIngredients = [];
-        
+
         foreach ($dataToDatabase as $data) {
             $dataLength = strlen($data);
-        
+
             if ($dataLength > 0) {
                 $ingredient = $this->ingredientProvider->loadIngredientById($data);
-        
+
                 // Klucz identyfikujący składnik i zamówienie
                 $key = $ingredient->getId();
-        
+
                 // Sprawdź, czy składnik został już przetworzony
                 if (isset($processedIngredients[$key])) {
                     // Jeżeli tak, zaktualizuj amountOfIngredients
                     $processedIngredients[$key]->setAmountIngredient($processedIngredients[$key]->getAmountIngredient() + 1);
                 } else {
                     // Jeżeli nie istnieje, utwórz nowy OrderIngredient
-                    $orderIngredient = new OrderIngredient($amountOfIngredients, $ingredient, $order);
-        
+                    $orderIngredient = new OrderIngredient(
+                        amountIngredient: $amountOfIngredients,
+                        Ingredient: $ingredient,
+                        order: $order);
+
                     // Persistuj nowy OrderIngredient
                     $entityManager->persist($orderIngredient);
-        
+
                     // Dodaj do przetworzonych składników
                     $processedIngredients[$key] = $orderIngredient;
                 }
@@ -49,12 +52,4 @@ class createOrderIngredients
         }
     }
 
-
 }
-
-
-
-
-
-
-

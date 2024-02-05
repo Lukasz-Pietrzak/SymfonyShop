@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
-use App\DTO\ProductDTO;
 use App\Entity\Product;
 use App\Repository\ProductQueryRepository;
-use App\Repository\ProductRepository;
 
 class ProductProvider
 {

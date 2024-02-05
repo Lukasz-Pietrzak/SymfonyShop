@@ -61,17 +61,23 @@ ul {
     color: white;
 }
 
+#shoppingView{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #cartIcon{
     /* background-color: crimson; */
     color: white;
     border-radius: 30%;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
-    padding: 7px;
-    margin-right: -7px;
+    padding: 5px;
 }
 
-svg{
+#shoppingCart{
     cursor: pointer;
+    margin-left: 0px;
 }

@@ -374,6 +374,10 @@ goToShoppingCart.addEventListener('mouseover', function() {
     goToShoppingCart.style.backgroundColor = 'crimson';
   });
 
+  goToShoppingCart.addEventListener('click', function() {
+    // Przekierowanie użytkownika do kontrolera shopping_cart
+    window.location.href = '/shopping-cart';
+});
 
 
 let ContinueShopping = document.createElement("span");

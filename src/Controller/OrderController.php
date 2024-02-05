@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\OrderDTO;
 use App\Handler\Order\createOrder;
+use App\Provider\OrderProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,12 +51,15 @@ class OrderController extends AbstractController
     }
 
     #[Route('/shopping-cart', name: 'shopping_cart')]
-    public function shoppingCart(): Response
+    public function shoppingCart(OrderProvider $orderProvider): Response
     {
 
-        $user = $this->getUser();
+        $user = $this->getUser();        
+
+        $order = $orderProvider->loadOrderByUser($user);
 
         return $this->render('shoppingCart.html.twig', [
+            'order' => $order
         ]);
 
     }
