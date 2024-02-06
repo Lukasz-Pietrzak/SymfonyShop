@@ -29,6 +29,18 @@ class OrderProvider
 
     }
 
+    public function loadOrderById(string $orderId): Order 
+    {
+        $order = $this->orderQueryRepository->find($orderId);
+
+        if(!$order){
+            throw new \InvalidArgumentException('Order not found');
+        }
+        
+        return $order;
+
+    }
+
     // public function loadOrderByUser(User $user): Order
     // {
     //     $queryBuilder = $this->entityManager->createQueryBuilder();

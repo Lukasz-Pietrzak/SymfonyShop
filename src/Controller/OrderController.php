@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\DTO\OrderDTO;
 use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
+use App\Repository\OrderIngredientRepository;
 use App\Repository\OrderProductRepository;
 use App\Repository\OrderQueryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,18 +67,33 @@ class OrderController extends AbstractController
         ]);
     }
 
+  
     #[Route('/delete-order/{id}', name: 'delete_order')]
     public function delete(
         string $id,
-        OrderProvider $orderProvider
+        OrderProvider $orderProvider,
+        EntityManagerInterface $entityManager
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        $product = $productProvider->loadProductById($id);
-
-        $productRepository->remove($product);
-        $this->addFlash('success', 'Product has been successfully deleted');
-
-        return $this->redirectToRoute('list');
+        $order = $orderProvider->loadOrderById($id);
+    
+        // Usunięcie powiązanych produktów
+        foreach ($order->getOrderProduct() as $orderProduct) {
+            $order->removeOrderProduct($orderProduct);
+            $entityManager->remove($orderProduct);
+        }
+    
+        // Usunięcie powiązanych składników
+        foreach ($order->getOrderIngredient() as $orderIngredient) {
+            $order->removeOrderIngredient($orderIngredient);
+            $entityManager->remove($orderIngredient);
+        }
+    
+        // Usunięcie samego zamówienia
+        $entityManager->remove($order);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Order has been successfully deleted');
+    
+        return $this->redirectToRoute('shopping_cart');
     }
 }
