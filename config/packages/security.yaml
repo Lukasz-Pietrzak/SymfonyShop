@@ -36,6 +36,7 @@ security:
             logout:
                 path: /logout
                 target: ui_home
+            user_checker: App\Security\UserChecker
 
         
                 
