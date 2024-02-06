@@ -6,9 +6,11 @@
 			<thead>
 				<tr>
 					<th scope="col" class="col-md-4 text-center fs-5">Price</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Name</th>
+					<th scope="col" class="col-md-4 text-center fs-5">Pizza name</th>
 					<th scope="col" class="col-md-4 text-center fs-5">Size</th>
-					{# <th scope="col" class="col-md-4 text-center fs-5">Ingredient</th> #}
+					<th scope="col" class="col-md-4 text-center fs-5">Amount Products</th>
+					<th scope="col" class="col-md-4 text-center fs-5">Ingredient name</th>
+					<th scope="col" class="col-md-4 text-center fs-5">Amount Ingredients</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,15 +32,26 @@
 									<span>{{ OrderProduct.size}}</span>
 								</div>
 							</td>
+							<td class="col-md-4">
+								<div class="product-container p-3 text-center fs-5">
+									<span>{{ OrderProduct.amountProducts}}</span>
+								</div>
+							</td>
 						{% endfor %}
 
-						{# {% for OrderIngredient in orderItem.orderIngredients %}
-													<td class="col-md-4">
-														<div class="product-container p-3 text-center fs-5">
-															<span>{{ OrderIngredient.amountIngredient }}</span>
-														</div>
-													</td>
-												{% endfor %} #}
+						{% for OrderIngredient in orderItem.OrderIngredient %}
+							<td class="col-md-4">
+								<div class="product-container p-3 text-center fs-5">
+									<span>{{ OrderIngredient.Ingredient.ingredient }}</span>
+								</div>
+							</td>
+
+							<td class="col-md-4">
+								<div class="product-container p-3 text-center fs-5">
+									<span>{{ OrderIngredient.amountIngredient }}</span>
+								</div>
+							</td>
+						{% endfor %}
 					</tr>
 				{% endfor %}
 			</tbody>
