@@ -43,6 +43,7 @@ class createOrderIngredients
                         order: $order);
 
                     // Persistuj nowy OrderIngredient
+                    $orderIngredient->getOrder()->addOrderIngredient($orderIngredient);
                     $entityManager->persist($orderIngredient);
 
                     // Dodaj do przetworzonych składników

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\DTO\OrderDTO;
 use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
+use App\Repository\OrderProductRepository;
+use App\Repository\OrderQueryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +43,7 @@ class OrderController extends AbstractController
 
         $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
 
+
         // Odpowiedź do klienta
         return new JsonResponse(['status' => 'success',
          'price' => $priceBrutto,
@@ -53,7 +56,6 @@ class OrderController extends AbstractController
     #[Route('/shopping-cart', name: 'shopping_cart')]
     public function shoppingCart(OrderProvider $orderProvider): Response
     {
-
         $user = $this->getUser();        
 
         $order = $orderProvider->loadOrderByUser($user);
@@ -61,9 +63,5 @@ class OrderController extends AbstractController
         return $this->render('shoppingCart.html.twig', [
             'order' => $order
         ]);
-
     }
-
-
-
 }

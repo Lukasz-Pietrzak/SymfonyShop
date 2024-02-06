@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: OrderProductRepository::class)]
 class OrderProduct extends BaseEntity
 {
+
+
+
     public function __construct(
         #[ORM\Column]
         private int $amountProducts,
@@ -16,9 +19,9 @@ class OrderProduct extends BaseEntity
         #[ORM\ManyToOne(inversedBy: 'orderProducts')]
         #[ORM\JoinColumn(nullable: false)]
         private ?Product $product = null,
-        #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+        #[ORM\ManyToOne(inversedBy: 'OrderProduct')]
         #[ORM\JoinColumn(nullable: false)]
-        private ?Order $orders = null
+        private ?Order $Orders = null
         ) {
         
     }
@@ -64,12 +67,12 @@ class OrderProduct extends BaseEntity
 
     public function getOrders(): ?Order
     {
-        return $this->orders;
+        return $this->Orders;
     }
 
-    public function setOrders(?Order $orders): static
+    public function setOrders(?Order $Orders): static
     {
-        $this->orders = $orders;
+        $this->Orders = $Orders;
 
         return $this;
     }

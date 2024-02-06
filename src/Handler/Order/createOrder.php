@@ -27,13 +27,14 @@ class createOrder
             user: $dto->user
         );
 
+        $this->entityManager->persist($order);
 
         $this->createOrderProduct->create($productId, $howManyClickPizza, $sizeSave, $order, $this->entityManager);
         $this->createOrderIngredients->create($dataToDatabase, $order, $this->entityManager);
 
-        $this->entityManager->persist($order);
-
         $this->entityManager->flush();
+
+        dump($order);
 
     }
 }

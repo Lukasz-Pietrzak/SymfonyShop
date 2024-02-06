@@ -13,12 +13,11 @@ use Doctrine\ORM\Mapping\Table;
 class Order extends BaseEntity
 {
 
-    #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: OrderIngredient::class)]
+    #[ORM\OneToMany(mappedBy: 'Ingredients', targetEntity: OrderIngredient::class)]
     private Collection $orderIngredients;
 
-    #[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class, orphanRemoval: true)]
-    private Collection $orderProducts;
-
+    #[ORM\OneToMany(mappedBy: 'Orders', targetEntity: OrderProduct::class)]
+    private Collection $OrderProduct;
 
     public function __construct(
         #[ORM\Column(type: Types::INTEGER)]
@@ -31,7 +30,7 @@ class Order extends BaseEntity
         private ?User $user = null
         ) {
         $this->orderIngredients = new ArrayCollection();
-        $this->orderProducts = new ArrayCollection();
+        $this->OrderProduct = new ArrayCollection();
     }
 
     public function getId(): string
@@ -99,35 +98,6 @@ class Order extends BaseEntity
         return $this;
     }
 
-    /**
-     * @return Collection<int, OrderProduct>
-     */
-    public function getOrderProducts(): Collection
-    {
-        return $this->orderProducts;
-    }
-
-    public function addOrderProduct(OrderProduct $orderProduct): static
-    {
-        if (!$this->orderProducts->contains($orderProduct)) {
-            $this->orderProducts->add($orderProduct);
-            $orderProduct->setOrders($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrderProduct(OrderProduct $orderProduct): static
-    {
-        if ($this->orderProducts->removeElement($orderProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($orderProduct->getOrders() === $this) {
-                $orderProduct->setOrders(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -137,6 +107,36 @@ class Order extends BaseEntity
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderProduct>
+     */
+    public function getOrderProduct(): Collection
+    {
+        return $this->OrderProduct;
+    }
+
+    public function addOrderProduct(OrderProduct $orderProduct): static
+    {
+        if (!$this->OrderProduct->contains($orderProduct)) {
+            $this->OrderProduct->add($orderProduct);
+            $orderProduct->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProduct $orderProduct): static
+    {
+        if ($this->OrderProduct->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getOrders() === $this) {
+                $orderProduct->setOrders(null);
+            }
+        }
 
         return $this;
     }

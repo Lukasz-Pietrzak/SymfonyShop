@@ -1,24 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col" class="col-md-4 text-center fs-5">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for orderItem in order %}
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="product-container p-3 text-center fs-5">
-                                <span>{{ orderItem.orderPriceBrutto }}</span>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+	<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col" class="col-md-4 text-center fs-5">Price</th>
+					<th scope="col" class="col-md-4 text-center fs-5">Name</th>
+					<th scope="col" class="col-md-4 text-center fs-5">Size</th>
+					{# <th scope="col" class="col-md-4 text-center fs-5">Ingredient</th> #}
+				</tr>
+			</thead>
+			<tbody>
+				{% for orderItem in order %}
+					<tr>
+						<td class="col-md-4">
+							<div class="product-container p-3 text-center fs-5">
+								<span>{{ orderItem.orderPriceBrutto }}</span>
+							</div>
+						</td>
+						{% for OrderProduct in orderItem.OrderProduct %}
+							<td class="col-md-4">
+								<div class="product-container p-3 text-center fs-5">
+									<span>{{ OrderProduct.product.name }}</span>
+								</div>
+							</td>
+							<td class="col-md-4">
+								<div class="product-container p-3 text-center fs-5">
+									<span>{{ OrderProduct.size}}</span>
+								</div>
+							</td>
+						{% endfor %}
+
+						{# {% for OrderIngredient in orderItem.orderIngredients %}
+													<td class="col-md-4">
+														<div class="product-container p-3 text-center fs-5">
+															<span>{{ OrderIngredient.amountIngredient }}</span>
+														</div>
+													</td>
+												{% endfor %} #}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 {% endblock %}

@@ -16,7 +16,7 @@ class OrderIngredient extends BaseEntity
         #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
         private Ingredients $Ingredient,
         #[ORM\ManyToOne(inversedBy: 'orderIngredients')]
-        private Order $order
+        private Order $order,
     )
     {
 
@@ -60,5 +60,4 @@ class OrderIngredient extends BaseEntity
         $this->Ingredient = $order;
 
     }
-
 }

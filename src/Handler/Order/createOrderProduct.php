@@ -3,6 +3,7 @@
 declare (strict_types = 1);
 
 namespace App\Handler\Order;
+
 use App\Entity\OrderProduct;
 use App\Provider\ProductProvider;
 
@@ -16,17 +17,18 @@ class createOrderProduct
 
     public function create($productId, $howManyClickPizza, $sizeSave, $order, $entityManager)
     {
-
         $product = $this->productProvider->loadProductById($productId);
 
         $orderProduct = new OrderProduct(
             amountProducts: $howManyClickPizza,
             size: $sizeSave,
             product: $product,
-            orders: $order);
+            Orders: $order);
 
-            $entityManager->persist($orderProduct);
+        $orderProduct->getOrders()->addOrderProduct($orderProduct);
+        
+        $entityManager->persist($orderProduct);
+        
     }
-
 
 }
