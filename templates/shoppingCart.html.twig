@@ -2,59 +2,44 @@
 
 {% block body %}
 	<div class="container">
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col" class="col-md-4 text-center fs-5">Price</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Pizza name</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Size</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Amount Products</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Ingredient name</th>
-					<th scope="col" class="col-md-4 text-center fs-5">Amount Ingredients</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for orderItem in order %}
-					<tr>
-						<td class="col-md-4">
-							<div class="product-container p-3 text-center fs-5">
-								<span>{{ orderItem.orderPriceBrutto }}</span>
-							</div>
-						</td>
-						{% for OrderProduct in orderItem.OrderProduct %}
-							<td class="col-md-4">
-								<div class="product-container p-3 text-center fs-5">
-									<span>{{ OrderProduct.product.name }}</span>
-								</div>
-							</td>
-							<td class="col-md-4">
-								<div class="product-container p-3 text-center fs-5">
-									<span>{{ OrderProduct.size}}</span>
-								</div>
-							</td>
-							<td class="col-md-4">
-								<div class="product-container p-3 text-center fs-5">
-									<span>{{ OrderProduct.amountProducts}}</span>
-								</div>
-							</td>
-						{% endfor %}
+		<div class="row">
+			{% for orderItem in order %}
+				<div class="col-md-6 mb-4">
+					<div class="card">
+						<div class="card-body">
+							{% for OrderProduct in orderItem.OrderProduct %}
+								<div class="text-center">
+									<h4 class="card-title">{{ OrderProduct.product.name }}</h4>
+									<img style="max-width: 60%; height: auto; margin-top: -4%;" src="{{ asset('images/products/' ~ OrderProduct.product.imageName) }}" class="img-fluid" alt="{{ OrderProduct.product.name }}">
 
-						{% for OrderIngredient in orderItem.OrderIngredient %}
-							<td class="col-md-4">
-								<div class="product-container p-3 text-center fs-5">
-									<span>{{ OrderIngredient.Ingredient.ingredient }}</span>
 								</div>
-							</td>
+								<div class="text-center fs-5" style="margin-top: -3%">
+									<p>Size:
+										{{ OrderProduct.size }}</p>
+									<p>Amount:
+										{{ OrderProduct.amountProducts }}</p>
+								</div>
+							{% endfor %}
 
-							<td class="col-md-4">
-								<div class="product-container p-3 text-center fs-5">
-									<span>{{ OrderIngredient.amountIngredient }}</span>
+							{% for OrderIngredient in orderItem.OrderIngredient %}
+								<div class="text-center fs-5">
+									<p>{{ OrderIngredient.Ingredient.ingredient }}:
+										{{ OrderIngredient.amountIngredient }}</p>
 								</div>
-							</td>
-						{% endfor %}
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+							{% endfor %}
+						</div>
+	<div class="card-footer text-center" style="display: flex; justify-content: center; align-items: space-between;">
+    <span style="margin-right: 4px;">Order price:</span>
+    <h5 class="card-title" style="margin-right: 4px;">{{ orderItem.orderPriceBrutto }} zł</h5>
+    <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" fill="currentColor" class="bi bi-trash3" viewbox="0 0 16 16">
+        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+    </svg>
+</div>
+
+
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 {% endblock %}

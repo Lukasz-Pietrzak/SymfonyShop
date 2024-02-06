@@ -28,28 +28,26 @@
     <a href="{{ path('ingredient-list')}}" class="btn btn-danger text-center fs-5">{{ 'ShowIngredient'|trans }}</a>
 </div>
 
-<div class="container">
-    <table class="table">
-        <!-- Your table content here -->
-
-        <thead style="width: 400px; height: auto;">
-            <tr>
+<div class="table-responsive-sm ">
+    <table class="table table-bordered border-secondary table-sm" style="--bs-border-opacity: .2;">
+        <thead style="height: auto; ">
+            <tr class="table-active">
                 <th scope="col" class="col-md-4 text-center fs-5">{{ 'Name'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Description'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNettoSmall'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBruttoSmall'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VATSmall'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNettoMedium'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBruttoMedium'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VATMedium'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceNettoLarge'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'PriceBruttoLarge'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VATLarge'|trans }}</th>
-                <th scope="col" class="col-md-4 text-center fs-5">{{ 'ImageName'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5 px-5"> {{ 'Description'|trans }} </th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Netto Small'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Brutto Small'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT Small'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Netto Medium'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Brutto Medium'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT Medium'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Netto Large'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Price Brutto Large'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'VAT Large'|trans }}</th>
+                <th scope="col" class="col-md-4 text-center fs-5">{{ 'Image Name'|trans }}</th>
             </tr>
         </thead>
 
-        <tbody>
+<tbody>
             {% for productFind in product %}
                 <tr>
                     <td class="col-md-4">

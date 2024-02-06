@@ -64,4 +64,19 @@ class OrderController extends AbstractController
             'order' => $order
         ]);
     }
+
+    #[Route('/delete-order/{id}', name: 'delete_order')]
+    public function delete(
+        string $id,
+        OrderProvider $orderProvider
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $product = $productProvider->loadProductById($id);
+
+        $productRepository->remove($product);
+        $this->addFlash('success', 'Product has been successfully deleted');
+
+        return $this->redirectToRoute('list');
+    }
 }
