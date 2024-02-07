@@ -6,6 +6,7 @@ export {createIngredientButton};
 export {noSizeCheckedFunction};
 export {addButtonPlus};
 export {addButtonMinus};
+export {createButton};
 
 
 const orderNowButton = document.getElementById("order-now");

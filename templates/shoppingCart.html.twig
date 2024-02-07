@@ -46,4 +46,14 @@
 			{% endfor %}
 		</div>
 	</div>
+
+	<div class="total-price"
+    data-price="{{ totalPrice|serialize(format = 'json') }}"
+>
+</div>
+
+	    <script type="module" src="{{ asset('js/shoppingCart.js') }}">
+
+
+      </script> 
 {% endblock %}

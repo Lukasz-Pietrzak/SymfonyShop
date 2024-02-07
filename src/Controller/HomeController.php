@@ -17,7 +17,7 @@ class HomeController extends AbstractController
     {
         $ingredients = $ingredientProvider->loadAll();
         $products = $productProvider->loadAll();
-        return $this->render('home/home.html.twig', [
+        return $this->render('home.html.twig', [
             'ingredients' => $ingredients,
             'products' => $products,
         ]);

@@ -62,8 +62,16 @@ class OrderController extends AbstractController
 
         $order = $orderProvider->loadOrderByUser($user);
 
+        $totalPrice = 0;
+
+        //Calculating total price from all order each user
+            foreach ($order as $singleOrder) {
+                $totalPrice += $singleOrder->getOrderPriceBrutto();
+            }
+
         return $this->render('shoppingCart.html.twig', [
-            'order' => $order
+            'order' => $order,
+            'totalPrice' => $totalPrice
         ]);
     }
 
@@ -76,20 +84,12 @@ class OrderController extends AbstractController
     ): Response {
         $order = $orderProvider->loadOrderById($id);
     
-        // Usunięcie powiązanych produktów
-        foreach ($order->getOrderProduct() as $orderProduct) {
-            $order->removeOrderProduct($orderProduct);
-            $entityManager->remove($orderProduct);
-        }
-    
-        // Usunięcie powiązanych składników
-        foreach ($order->getOrderIngredient() as $orderIngredient) {
-            $order->removeOrderIngredient($orderIngredient);
-            $entityManager->remove($orderIngredient);
-        }
-    
-        // Usunięcie samego zamówienia
+        $orderProvider->removeOrderProduct($order);
+        
+        $orderProvider->removeOrderIngredient($order);
+
         $entityManager->remove($order);
+
         $entityManager->flush();
     
         $this->addFlash('success', 'Order has been successfully deleted');
