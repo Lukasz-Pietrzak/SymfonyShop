@@ -1,0 +1,13 @@
+.total-price {
+    position: fixed;
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    background-color: crimson;
+    padding: 10px 20px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+}

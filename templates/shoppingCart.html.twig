@@ -1,7 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+   <link href="{{ asset('styles/shoppingCart.css') }}" rel="stylesheet">
+    <link href="{{ asset('styles/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+
 {% block body %}
-	<div class="container">
+	<div class="container" style="margin-bottom: 50px">
 		<div class="row">
 			{% for orderItem in order %}
 				<div class="col-md-6 mb-4">
@@ -47,13 +53,7 @@
 		</div>
 	</div>
 
-	<div class="total-price"
-    data-price="{{ totalPrice|serialize(format = 'json') }}"
->
-</div>
-
-	    <script type="module" src="{{ asset('js/shoppingCart.js') }}">
-
-
-      </script> 
+	<div class="total-price">
+		Go to shopping cart: {{totalPrice}} zł
+	</div>
 {% endblock %}
