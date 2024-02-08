@@ -290,6 +290,10 @@ function noSizeCheckedFunction(){
 
 
 let cartIconCounter = parseInt(localStorage.getItem("cartIconCounter")) || 0;
+    // cartIconCounter = 0;
+    // localStorage.setItem("cartIconCounter", cartIconCounter);
+
+
 
 if(cartIconCounter > 0){
     cartIconElement.innerHTML = cartIconCounter;

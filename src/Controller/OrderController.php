@@ -3,12 +3,11 @@
 namespace App\Controller;
 
 use App\DTO\OrderDTO;
+use App\Event\OrderDeletedEvent;
 use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
-use App\Repository\OrderIngredientRepository;
-use App\Repository\OrderProductRepository;
-use App\Repository\OrderQueryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,6 +67,7 @@ class OrderController extends AbstractController
             foreach ($order as $singleOrder) {
                 $totalPrice += $singleOrder->getOrderPriceBrutto();
             }
+            
 
         return $this->render('shoppingCart.html.twig', [
             'order' => $order,
@@ -80,20 +80,24 @@ class OrderController extends AbstractController
     public function delete(
         string $id,
         OrderProvider $orderProvider,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
     ): Response {
         $order = $orderProvider->loadOrderById($id);
     
-        $orderProvider->removeOrderProduct($order);
-        
-        $orderProvider->removeOrderIngredient($order);
-
-        $entityManager->remove($order);
-
-        $entityManager->flush();
+        $event = new OrderDeletedEvent($order);
+        $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
     
         $this->addFlash('success', 'Order has been successfully deleted');
     
         return $this->redirectToRoute('shopping_cart');
     }
 }
+
+        // $orderProvider->removeOrderProduct($order);
+        
+        // $orderProvider->removeOrderIngredient($order);
+
+        // $entityManager->remove($order);
+
+        // $entityManager->flush();
