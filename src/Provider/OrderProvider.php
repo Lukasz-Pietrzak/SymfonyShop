@@ -21,9 +21,9 @@ class OrderProvider
     {
         $order = $this->orderQueryRepository->findBy(['user' => $user]);
 
-        if (!$order) {
-            throw new \InvalidArgumentException('Order not found');
-        }
+        // if (!$order) {
+        //     throw new \InvalidArgumentException('Order not found');
+        // }
 
         return $order;
 

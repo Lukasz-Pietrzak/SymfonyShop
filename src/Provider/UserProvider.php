@@ -24,6 +24,24 @@ class UserProvider
         }
 
         return $user;
+    }
 
+    public function loadUserById(string $userId): User
+    {
+        $user = $this->userQueryRepository->find($userId);
+
+        if (!$user) {
+            throw new \InvalidArgumentException('User not found');
+        }
+
+        return $user;
+
+    }
+
+    public function loadAll(): array
+    {
+        $order = $this->userQueryRepository->findAll();
+
+        return $order;
     }
 }

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\DTO\OrderDTO;
 use App\Event\OrderDeletedEvent;
 use App\Handler\Order\createOrder;
+use App\Handler\Order\OrderRemover;
 use App\Provider\OrderProvider;
+use App\Provider\UserProvider;
 use DateTime;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class OrderController extends AbstractController
@@ -86,17 +87,26 @@ class OrderController extends AbstractController
         string $id,
         OrderProvider $orderProvider,
         EventDispatcherInterface $eventDispatcher,
-        Security $security
+        Security $security,
+        UserProvider $userProvider,
+        OrderRemover $orderRemover
     ): Response {
-        $order = $orderProvider->loadOrderById($id);
-    
-        $event = new OrderDeletedEvent($order);
-        $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
-    
         if (!$security->isGranted('ROLE_ADMIN')) {
+
+            $order = $orderProvider->loadOrderById($id);
+            $event = new OrderDeletedEvent($order);
+            $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
+            
             $this->addFlash('success', 'Order has been successfully deleted');
             return $this->redirectToRoute('shopping_cart');
+
         } elseif ($security->isGranted('ROLE_ADMIN')) {
+            $user = $userProvider->loadUserById($id);
+
+            $orders = $orderProvider->loadOrderByUser($user);
+
+            $orderRemover->deleteOrders($orders);
+
             $this->addFlash('success', 'Order has been successfully confirmed and deleted');
             return $this->redirectToRoute('order_list');
         }
@@ -106,22 +116,38 @@ class OrderController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function order_list(
         OrderProvider $orderProvider,
+        UserProvider $userProvider
     ): Response {
-        $order = $orderProvider->loadAll();
+        $user = $userProvider->loadAll();
+  
+            $allOrders = [];
+            $userArray = [];
+
+            foreach ($user as $userek) {
+                $orders = $orderProvider->loadOrderByUser($userek);
+                $userArray[] = $userek;
+                
+                // Dla każdego użytkownika dodajemy jego zamówienia do tablicy wszystkich zamówień
+                foreach ($orders as $order) {
+                    $allOrders[] = $order;
+                }
+            }
 
         $totalPrice = 0;
         $amountOrder = 0;
 
-        //Calculating total price from all order each user
-            foreach ($order as $singleOrder) {
+        // Calculating total price from all order each user
+            foreach ($allOrders as $singleOrder) {
                 $totalPrice += $singleOrder->getOrderPriceBrutto();
                 $amountOrder++;
             }
 
         return $this->render('list/orderList.html.twig', [
-            'order' => $order,
+            'userek' => $userArray,
+            'order' => $allOrders,
             'totalPrice' => $totalPrice,
             'amountOrder' => $amountOrder
         ]);
+        
     }
 }

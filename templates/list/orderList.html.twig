@@ -11,44 +11,61 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-body">
-						{% for orderItem in order %}
-							<div class="mb-4">
-								{% for OrderProduct in orderItem.OrderProduct %}
-									<div class="text-center">
-										<h4 class="card-title">{{ OrderProduct.product.name }}</h4>
-										<span>Time:
-											{{ orderItem.Date|date('H:i:s') }}</span>
+						{% for userItem in userek %}
+
+							{% set filteredOrders = order|filter(orderItem => orderItem.user.email == userItem.email) %}
+							{% for orderItem in filteredOrders %}
+								<div class="mb-4">
+									{% for OrderProduct in orderItem.OrderProduct %}
+										<div class="text-center">
+											<h4 class="card-title">{{ OrderProduct.product.name }}</h4>
+											<span>Time:
+												{{ orderItem.Date|date('H:i:s') }}</span>
+										</div>
+										<div class="text-center fs-5" style="margin-top: 1%">
+											<p>Size:
+												{{ OrderProduct.size }}</p>
+											<p>Amount:
+												{{ OrderProduct.amountProducts }}</p>
+										</div>
+									{% endfor %}
+									{% for OrderIngredient in orderItem.OrderIngredient %}
+										<div class="text-center fs-5">
+											<p>{{ OrderIngredient.Ingredient.ingredient }}:
+												{{ OrderIngredient.amountIngredient }}</p>
+										</div>
+									{% endfor %}
+
+
+									<div class="text-center" style="margin-top: 20px">
+										<span style="margin-right: 4px;">Order price:</span>
+										<h5 class="card-title" style="margin-right: 4px; margin-top: 1%">{{ orderItem.orderPriceBrutto }}
+											zł</h5>
 									</div>
-									<div class="text-center fs-5" style="margin-top: 1%">
-										<p>Size:
-											{{ OrderProduct.size }}</p>
-										<p>Amount:
-											{{ OrderProduct.amountProducts }}</p>
-									</div>
-								{% endfor %}
-								{% for OrderIngredient in orderItem.OrderIngredient %}
+								</div>
 									<div class="text-center fs-5">
-										<p>{{ OrderIngredient.Ingredient.ingredient }}:
-											{{ OrderIngredient.amountIngredient }}</p>
-									</div>
-								{% endfor %}
-								<div class="text-center fs-5">
-									Email:
-									{{ orderItem.user.email }}
-									<br>
-									Phone number:
-									{{ orderItem.user.phoneNumber }}
-								</div>
-								<div class="text-center" style="margin-top: 20px">
-									<span style="margin-right: 4px;">Order price:</span>
-									<h5 class="card-title" style="margin-right: 4px; margin-top: 1%">{{ orderItem.orderPriceBrutto }}
-										zł</h5>
-								</div>
-							</div>
-							<div class="confirm-order">
-								<a href="{{ path('delete_order', {'id': orderItem.id}) }}">Confirm order</a>
-							</div>
+										{% if loop.last %}
+										<hr>
+										<h4>Data for delivery:</h4>
+											Email:
+											{{ orderItem.user.email }}
+											<br>
+											Phone number:
+											{{ orderItem.user.phoneNumber }}
+										</div>
+										<br>
+
+										<div class="confirm-order">
+											<a href="{{ path('delete_order', {'id': orderItem.user.id}) }}">Confirm order</a>
+										</div>
+
+									{% endif %}
+
+								<hr>
+
+							{% endfor %}
 						{% endfor %}
+
 					</div>
 				</div>
 			</div>
