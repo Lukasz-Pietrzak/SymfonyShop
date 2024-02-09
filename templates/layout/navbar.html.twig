@@ -15,6 +15,10 @@
 			<li>
 				<a href="{{ path('list') }}" class="nav" id='Menu'>Products</a>
 			</li>
+			
+			<li>
+				<a href="{{ path('order_list') }}" class="nav">Orders</a>
+			</li>
 		{% endif %}
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 			<li>
@@ -49,27 +53,12 @@
 	</ul>
 
 	<script>
-		// JavaScript
-const cartIconElement = document.getElementById("cartIcon");
+		const cartIconElement = document.getElementById("cartIcon");
 let cartIconCounter = parseInt(localStorage.getItem("cartIconCounter")) || 0;
 
 if (cartIconCounter > 0) {
 cartIconElement.innerHTML = cartIconCounter;
 cartIconElement.style.backgroundColor = "crimson";
 }
-
-{# // JavaScript
-window.addEventListener('storage', function(event) {
-    if (event.key === 'cartIconCounter') {
-        const cartIconElement = document.getElementById("cartIcon");
-        let cartIconCounter = parseInt(event.newValue) || 0;
-        
-        if (cartIconCounter > 0) {
-            cartIconElement.innerHTML = cartIconCounter;
-            cartIconElement.style.backgroundColor = "crimson";
-        }
-    }
-}); #}
-
 	</script>
 </div>

@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[AsController('/products')]
+// #[AsController('/products')]
 class IngredientController extends AbstractController
 {
     public function __construct(private readonly Security $security)
@@ -46,7 +46,7 @@ class IngredientController extends AbstractController
             
         }
 
-        return $this->render('layout/ingredientList.html.twig', [
+        return $this->render('list/ingredientList.html.twig', [
             'articleForm' => $form->createView(),
             'ingredient' => $ingredients,
             'message' => 'Search ingredient'
@@ -75,7 +75,7 @@ class IngredientController extends AbstractController
             return $this->redirectToRoute('list');
         }
 
-        return $this->render('layout/form.html.twig', [
+        return $this->render('form/form.html.twig', [
             'articleForm' => $form->createView(),
             'message' => "Add ingredient",
         ]);
@@ -104,7 +104,7 @@ class IngredientController extends AbstractController
             return $this->redirectToRoute('list');
         }
 
-        return $this->render('layout/form.html.twig', [
+        return $this->render('form/form.html.twig', [
             'articleForm' => $form->createView(),
             'message' => "Edit",
         ]);

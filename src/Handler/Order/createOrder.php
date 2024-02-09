@@ -24,6 +24,7 @@ class createOrder
             orderPriceNetto: $dto->orderPriceNetto,
             orderPriceBrutto: $dto->orderPriceBrutto,
             orderPriceVAT: $dto->orderPriceVAT,
+            Date: $dto->dateTime,
             user: $dto->user
         );
 

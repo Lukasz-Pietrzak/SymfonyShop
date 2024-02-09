@@ -41,7 +41,7 @@ class MenuController extends AbstractController
             
         }
 
-        return $this->render('menu/menu.html.twig', [
+        return $this->render('menu.html.twig', [
             'articleForm' => $form->createView(),
             'products' => $products,
             'ingredients' => $ingredients,

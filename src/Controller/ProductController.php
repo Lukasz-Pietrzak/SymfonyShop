@@ -50,37 +50,10 @@ class ProductController extends AbstractController
             
         }
 
-        return $this->render('layout/list.html.twig', [
+        return $this->render('list/productList.html.twig', [
             'articleForm' => $form->createView(),
             'product' => $products,
             'message' => 'Search product'
-        ]);
-    }
-
-    #[Route('/ingredientsList', name: 'ingredient-list')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function ingredients_list(Request $request, IngredientProvider $ingredientProvider): Response
-    {
-        $ingredients = $ingredientProvider->loadAll();
-        $dto = new BrowserDTO();
-
-        $form = $this->createForm(BrowserFormType::class, $dto);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (empty($dto->browse_field)) {
-                $ingredients = $ingredientProvider->loadAll();
-            }else{
-                $ingredients = $ingredientProvider->loadProductsByName($dto->browse_field);
-            }
-            
-        }
-
-        return $this->render('layout/ingredientList.html.twig', [
-            'articleForm' => $form->createView(),
-            'ingredient' => $ingredients,
-            'message' => 'Search ingredient'
         ]);
     }
 
@@ -105,36 +78,9 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('list');
         }
 
-        return $this->render('layout/form.html.twig', [
+        return $this->render('form/form.html.twig', [
             'articleForm' => $form->createView(),
             'message' => "Add product",
-        ]);
-    }
-
-    #[Route('/add-ingredient', name: 'create-ingredient')]
-    public function createIngredient(
-        CreateIngredient $createIngredient,
-        Request $request
-    ): Response {
-        if (!$this->security->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('list');
-        }
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        $dto = new IngredientsDTO();
-        $form = $this->createForm(IngredientsFormType::class, $dto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $createIngredient->create($dto);
-            $this->addFlash('success', 'Product has been successfully created');
-
-            return $this->redirectToRoute('list');
-        }
-
-        return $this->render('layout/form.html.twig', [
-            'articleForm' => $form->createView(),
-            'message' => "Add ingredient",
         ]);
     }
 
@@ -161,7 +107,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('list');
         }
 
-        return $this->render('layout/form.html.twig', [
+        return $this->render('form/form.html.twig', [
             'articleForm' => $form->createView(),
             'message' => "Edit",
         ]);

@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\UserAuthenticationRepository;
+use App\Entity\UserAddress;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -21,6 +20,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
         private string $authenticationCode,
     ) {
     }
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -31,7 +31,11 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     #[ORM\Column]
     private string $password;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $phoneNumber = null;
 
+    #[ORM\OneToOne(targetEntity: UserAddress::class, cascade: ["persist", "remove"], orphanRemoval: true)]
+    private UserAddress $userAddress;
 
     public function getId(): string
     {
@@ -103,6 +107,31 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     public function eraseCredentials(): void
     {
     }
+
+    public function getPhoneNumber(): ?int
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?int $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getAddress(): ?UserAddress
+    {
+        return $this->userAddress;
+    }
+
+    public function setAddress(?UserAddress $userAddress): static
+    {
+        $this->userAddress = $userAddress;
+
+        return $this;
+    }
+
 
     
 }

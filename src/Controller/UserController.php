@@ -24,7 +24,7 @@ class UserController extends AbstractController
     ): Response {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('login/login.html.twig', [
+        return $this->render('login.html.twig', [
             'error' => $error,
             'last_username' => $lastUsername,
         ]);
@@ -53,7 +53,7 @@ class UserController extends AbstractController
     ): Response {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('login/login.html.twig', [
+        return $this->render('login.html.twig', [
             'error' => $error,
             'last_username' => $lastUsername,
         ]);
@@ -94,7 +94,7 @@ class UserController extends AbstractController
             $this->addFlash('error', $errorMessage);
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('form/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

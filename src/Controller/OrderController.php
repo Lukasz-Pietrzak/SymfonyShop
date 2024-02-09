@@ -6,13 +6,16 @@ use App\DTO\OrderDTO;
 use App\Event\OrderDeletedEvent;
 use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
-use Doctrine\ORM\EntityManagerInterface;
+use DateTime;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class OrderController extends AbstractController
 {
@@ -40,7 +43,9 @@ class OrderController extends AbstractController
 
         $user = $this->getUser();
 
-        $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT, $user);
+        $currentDateTime = new DateTime();
+
+        $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT, $currentDateTime, $user);
 
         $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
 
@@ -80,24 +85,43 @@ class OrderController extends AbstractController
     public function delete(
         string $id,
         OrderProvider $orderProvider,
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        Security $security
     ): Response {
         $order = $orderProvider->loadOrderById($id);
     
         $event = new OrderDeletedEvent($order);
         $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
     
-        $this->addFlash('success', 'Order has been successfully deleted');
-    
-        return $this->redirectToRoute('shopping_cart');
+        if (!$security->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('success', 'Order has been successfully deleted');
+            return $this->redirectToRoute('shopping_cart');
+        } elseif ($security->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('success', 'Order has been successfully confirmed and deleted');
+            return $this->redirectToRoute('order_list');
+        }
+    }
+
+    #[Route('/order-list', name: 'order_list')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function order_list(
+        OrderProvider $orderProvider,
+    ): Response {
+        $order = $orderProvider->loadAll();
+
+        $totalPrice = 0;
+        $amountOrder = 0;
+
+        //Calculating total price from all order each user
+            foreach ($order as $singleOrder) {
+                $totalPrice += $singleOrder->getOrderPriceBrutto();
+                $amountOrder++;
+            }
+
+        return $this->render('list/orderList.html.twig', [
+            'order' => $order,
+            'totalPrice' => $totalPrice,
+            'amountOrder' => $amountOrder
+        ]);
     }
 }
-
-        // $orderProvider->removeOrderProduct($order);
-        
-        // $orderProvider->removeOrderIngredient($order);
-
-        // $entityManager->remove($order);
-
-        // $entityManager->flush();

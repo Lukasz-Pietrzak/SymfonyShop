@@ -2,17 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\UserAuthenticationRepository;
-use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Table('user_address')]
 #[ORM\Entity()]
-class Adress extends BaseEntity
+class UserAddress extends BaseEntity
 {
 
     public function __construct(

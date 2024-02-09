@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
-use App\Entity\Order;
 use App\Entity\User;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 
 class OrderDTO
 {
@@ -15,6 +14,7 @@ class OrderDTO
         public int $orderPriceNetto,
         public int $orderPriceBrutto,
         public int $orderPriceVAT,
+        public DateTime $dateTime,
         public ?User $user = null,
     ){
 

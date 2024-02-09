@@ -26,6 +26,8 @@ class Order extends BaseEntity
         private int $orderPriceBrutto,
          #[ORM\Column(type: Types::INTEGER)]
         private int $orderPriceVAT,
+        #[ORM\Column(type: Types::TIME_MUTABLE)]
+        private ?\DateTimeInterface $Date,
         #[ORM\ManyToOne]
         private ?User $user = null
         ) {
@@ -136,6 +138,18 @@ class Order extends BaseEntity
                 $orderIngredient->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->Date;
+    }
+
+    public function setDate(\DateTimeInterface $Date): static
+    {
+        $this->Date = $Date;
 
         return $this;
     }
