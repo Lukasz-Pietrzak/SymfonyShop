@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\DTO\OrderDTO;
 use App\Event\OrderDeletedEvent;
 use App\Handler\Order\createOrder;
-use App\Handler\Order\OrderRemover;
 use App\Provider\OrderProvider;
 use App\Provider\UserProvider;
 use DateTime;
@@ -89,7 +88,6 @@ class OrderController extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         Security $security,
         UserProvider $userProvider,
-        OrderRemover $orderRemover
     ): Response {
         if (!$security->isGranted('ROLE_ADMIN')) {
 
@@ -105,7 +103,7 @@ class OrderController extends AbstractController
 
             $orders = $orderProvider->loadOrderByUser($user);
 
-            $orderRemover->deleteOrders($orders);
+            $orderProvider->removeOrders($orders);
 
             $this->addFlash('success', 'Order has been successfully confirmed and deleted');
             return $this->redirectToRoute('order_list');
@@ -116,22 +114,14 @@ class OrderController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function order_list(
         OrderProvider $orderProvider,
-        UserProvider $userProvider
+        UserProvider $userProvider,
     ): Response {
         $user = $userProvider->loadAll();
-  
+
             $allOrders = [];
             $userArray = [];
 
-            foreach ($user as $userek) {
-                $orders = $orderProvider->loadOrderByUser($userek);
-                $userArray[] = $userek;
-                
-                // Dla każdego użytkownika dodajemy jego zamówienia do tablicy wszystkich zamówień
-                foreach ($orders as $order) {
-                    $allOrders[] = $order;
-                }
-            }
+            $orderProvider->loadAllOrdersForUsers($user, $userArray, $allOrders);
 
         $totalPrice = 0;
         $amountOrder = 0;

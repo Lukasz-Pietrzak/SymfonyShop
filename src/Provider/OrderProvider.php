@@ -29,6 +29,20 @@ class OrderProvider
 
     }
 
+    public function loadAllOrdersForUsers(array $user, array &$userArray, array &$allOrders )
+    {
+        foreach ($user as $userek) {
+            $orders = $this->loadOrderByUser($userek);
+            $userArray[] = $userek;
+            
+            // Dla każdego użytkownika dodajemy jego zamówienia do tablicy wszystkich zamówień
+            foreach ($orders as $order) {
+                $allOrders[] = $order;
+            }
+        }
+
+    }
+
     public function loadOrderById(string $orderId): Order
     {
         $order = $this->orderQueryRepository->find($orderId);
@@ -39,6 +53,13 @@ class OrderProvider
 
         return $order;
 
+    }
+
+    public function loadAll(): array
+    {
+        $order = $this->orderQueryRepository->findAll();
+
+        return $order;
     }
 
     public function removeOrderProduct(Order $order): void
@@ -56,13 +77,22 @@ class OrderProvider
             $order->removeOrderIngredient($orderIngredient);
             $this->entityManager->remove($orderIngredient);
         }
-
     }
 
-    public function loadAll(): array
+    public function removeOrders(array $orders): void
     {
-        $order = $this->orderQueryRepository->findAll();
+        foreach ($orders as $order) {
+            $this->removeOrderProduct($order);
 
-        return $order;
+            // Usuń składniki związane z zamówieniem
+            $this->removeOrderIngredient($order);
+    
+            // Usuń zamówienie
+            $this->entityManager->remove($order);
+        }
+
+        $this->entityManager->flush();
+
     }
+
 }
