@@ -8,9 +8,9 @@ use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
 use App\Provider\UserProvider;
 use DateTime;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,7 @@ class OrderController extends AbstractController
         $priceVAT = $priceBrutto - $priceNetto;
 
         $jsonProductId = $requestData['productId'];
-        
+
         $productId = trim($jsonProductId, '"');
 
         $howManyClickPizza = $requestData['howManyClickPizza'];
@@ -49,38 +49,35 @@ class OrderController extends AbstractController
 
         $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
 
-
         // Odpowiedź do klienta
         return new JsonResponse(['status' => 'success',
-         'price' => $priceBrutto,
-          'productId' => $productId,
-           'howManyClickPizza' => $howManyClickPizza,
-           'dataToDatabase' => $dataToDatabase
+            'price' => $priceBrutto,
+            'productId' => $productId,
+            'howManyClickPizza' => $howManyClickPizza,
+            'dataToDatabase' => $dataToDatabase,
         ]);
     }
 
     #[Route('/shopping-cart', name: 'shopping_cart')]
     public function shoppingCart(OrderProvider $orderProvider): Response
     {
-        $user = $this->getUser();        
+        $user = $this->getUser();
 
         $order = $orderProvider->loadOrderByUser($user);
 
         $totalPrice = 0;
 
         //Calculating total price from all order each user
-            foreach ($order as $singleOrder) {
-                $totalPrice += $singleOrder->getOrderPriceBrutto();
-            }
-            
+        foreach ($order as $singleOrder) {
+            $totalPrice += $singleOrder->getOrderPriceBrutto();
+        }
 
         return $this->render('shoppingCart.html.twig', [
             'order' => $order,
-            'totalPrice' => $totalPrice
+            'totalPrice' => $totalPrice,
         ]);
     }
 
-  
     #[Route('/delete-order/{id}', name: 'delete_order')]
     public function delete(
         string $id,
@@ -94,7 +91,7 @@ class OrderController extends AbstractController
             $order = $orderProvider->loadOrderById($id);
             $event = new OrderDeletedEvent($order);
             $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
-            
+
             $this->addFlash('success', 'Order has been successfully deleted');
             return $this->redirectToRoute('shopping_cart');
 
@@ -118,26 +115,24 @@ class OrderController extends AbstractController
     ): Response {
         $user = $userProvider->loadAll();
 
-            $allOrders = [];
-            $userArray = [];
-
-            $orderProvider->loadAllOrdersForUsers($user, $userArray, $allOrders);
-
         $totalPrice = 0;
         $amountOrder = 0;
 
-        // Calculating total price from all order each user
-            foreach ($allOrders as $singleOrder) {
-                $totalPrice += $singleOrder->getOrderPriceBrutto();
+        $orderProvider->loadAllOrdersByUser($user, $totalPrice, $amountOrder );
+
+        // Calculating total price from all order each user and how many orders are there
+        foreach ($user as $singleOrder) {
+            foreach($singleOrder->getOrders() as $order) {
+                $totalPrice += $order->getOrderPriceBrutto();
                 $amountOrder++;
             }
+        }
 
         return $this->render('list/orderList.html.twig', [
-            'userek' => $userArray,
-            'order' => $allOrders,
+            'userek' => $user,
             'totalPrice' => $totalPrice,
-            'amountOrder' => $amountOrder
+            'amountOrder' => $amountOrder,
         ]);
-        
+
     }
 }

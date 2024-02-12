@@ -25,7 +25,7 @@ class createOrder
             orderPriceBrutto: $dto->orderPriceBrutto,
             orderPriceVAT: $dto->orderPriceVAT,
             Date: $dto->dateTime,
-            user: $dto->user
+            User: $dto->user
         );
 
         $this->entityManager->persist($order);

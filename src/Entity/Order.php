@@ -28,8 +28,8 @@ class Order extends BaseEntity
         private int $orderPriceVAT,
         #[ORM\Column(type: Types::TIME_MUTABLE)]
         private ?\DateTimeInterface $Date,
-        #[ORM\ManyToOne]
-        private ?User $user = null
+        #[ORM\ManyToOne(inversedBy: 'Orders')]
+        private ?User $User = null
         ) {
         $this->OrderProduct = new ArrayCollection();
         $this->OrderIngredient = new ArrayCollection();
@@ -68,18 +68,6 @@ class Order extends BaseEntity
     public function setOrderPriceVAT(int $orderPriceVAT): void
     {
         $this->orderPriceVAT = $orderPriceVAT;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**
@@ -150,6 +138,18 @@ class Order extends BaseEntity
     public function setDate(\DateTimeInterface $Date): static
     {
         $this->Date = $Date;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }

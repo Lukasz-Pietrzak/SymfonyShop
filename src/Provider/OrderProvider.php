@@ -19,7 +19,7 @@ class OrderProvider
 
     public function loadOrderByUser(User $user): array
     {
-        $order = $this->orderQueryRepository->findBy(['user' => $user]);
+        $order = $this->orderQueryRepository->findBy(['User' => $user]);
 
         // if (!$order) {
         //     throw new \InvalidArgumentException('Order not found');
@@ -29,15 +29,13 @@ class OrderProvider
 
     }
 
-    public function loadAllOrdersForUsers(array $user, array &$userArray, array &$allOrders )
+    public function loadAllOrdersByUser(array $user)
     {
         foreach ($user as $userek) {
             $orders = $this->loadOrderByUser($userek);
-            $userArray[] = $userek;
-            
             // Dla każdego użytkownika dodajemy jego zamówienia do tablicy wszystkich zamówień
             foreach ($orders as $order) {
-                $allOrders[] = $order;
+                $userek->addOrder($order);
             }
         }
 
@@ -86,7 +84,7 @@ class OrderProvider
 
             // Usuń składniki związane z zamówieniem
             $this->removeOrderIngredient($order);
-    
+
             // Usuń zamówienie
             $this->entityManager->remove($order);
         }
