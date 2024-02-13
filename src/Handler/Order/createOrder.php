@@ -8,6 +8,7 @@ use App\DTO\OrderDTO;
 use App\Entity\Order;
 use App\Handler\Order\createOrderProduct;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class createOrder
 {
@@ -18,7 +19,7 @@ class createOrder
     ) {
     }
 
-    public function create(OrderDTO $dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase): void
+    public function create(OrderDTO $dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, SessionInterface $session): void
     {
         $order = new Order(
             orderPriceNetto: $dto->orderPriceNetto,
@@ -33,9 +34,29 @@ class createOrder
         $this->createOrderProduct->create($productId, $howManyClickPizza, $sizeSave, $order, $this->entityManager);
         $this->createOrderIngredients->create($dataToDatabase, $order, $this->entityManager);
 
+        if ($dto->user == null) {
+            $this->createSession($order, $session);
+        }
+
         $this->entityManager->flush();
-
-        dump($order);
-
     }
+
+    private function createSession(Order $order, SessionInterface $session): void
+    {
+        // Sprawdzenie, czy sesja już istnieje
+        if ($session->has('order')) {
+            // Pobranie aktualnych danych z sesji
+            $orderSession = $session->get('order');
+        } else {
+            // Jeśli sesja nie istnieje, utwórz nową pustą tablicę
+            $orderSession = array();
+        }
+
+        // Dodanie nowej wartości do tablicy orderSession
+        $orderSession[] = $order;
+
+        // Ustawienie tablicy orderSession w sesji
+        $session->set('order', $orderSession);
+    }
+
 }

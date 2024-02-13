@@ -6,6 +6,7 @@ use App\DTO\OrderDTO;
 use App\Event\OrderDeletedEvent;
 use App\Handler\Order\createOrder;
 use App\Provider\OrderProvider;
+use App\Provider\SessionProvider;
 use App\Provider\UserProvider;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,13 +15,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class OrderController extends AbstractController
 {
     #[Route('/add-to-cart', name: 'add_to_cart', methods: ['POST'])]
-    public function addToCart(createOrder $createOrder, Request $request): JsonResponse
+    public function addToCart(createOrder $createOrder, Request $request, SessionInterface $session): JsonResponse
     {
         // Odczytaj dane przesłane w żądaniu POST
         $requestData = json_decode($request->getContent(), true);
@@ -47,7 +49,7 @@ class OrderController extends AbstractController
 
         $dto = new OrderDTO($priceNetto, $priceBrutto, $priceVAT, $currentDateTime, $user);
 
-        $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $user);
+        $createOrder->create($dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, $session);
 
         // Odpowiedź do klienta
         return new JsonResponse(['status' => 'success',
@@ -59,23 +61,40 @@ class OrderController extends AbstractController
     }
 
     #[Route('/shopping-cart', name: 'shopping_cart')]
-    public function shoppingCart(OrderProvider $orderProvider): Response
+    public function shoppingCart(OrderProvider $orderProvider, SessionInterface $session): Response
     {
         $user = $this->getUser();
 
-        $order = $orderProvider->loadOrderByUser($user);
-
         $totalPrice = 0;
 
-        //Calculating total price from all order each user
-        foreach ($order as $singleOrder) {
-            $totalPrice += $singleOrder->getOrderPriceBrutto();
-        }
+        if ($user !== null) {
+            $order = $orderProvider->loadOrderByUser($user);
 
-        return $this->render('shoppingCart.html.twig', [
-            'order' => $order,
-            'totalPrice' => $totalPrice,
-        ]);
+            //Calculating total price from all order each user
+            foreach ($order as $singleOrder) {
+                $totalPrice += $singleOrder->getOrderPriceBrutto();
+            }
+
+            return $this->render('shoppingCart.html.twig', [
+                'order' => $order,
+                'totalPrice' => $totalPrice,
+            ]);
+
+        } else {
+            $orderData = $session->get('order');
+
+            if ($session->has('order')) {
+
+                foreach ($orderData as $singleOrder) {
+                    $totalPrice += $singleOrder->getOrderPriceBrutto();
+                }
+            }
+
+            return $this->render('shoppingCart.html.twig', [
+                'order' => $orderData,
+                'totalPrice' => $totalPrice,
+            ]);
+        }
     }
 
     #[Route('/delete-order/{id}', name: 'delete_order')]
@@ -85,12 +104,19 @@ class OrderController extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         Security $security,
         UserProvider $userProvider,
+        SessionProvider $sessionProvider
     ): Response {
         if (!$security->isGranted('ROLE_ADMIN')) {
 
             $order = $orderProvider->loadOrderById($id);
             $event = new OrderDeletedEvent($order);
             $eventDispatcher->dispatch($event, OrderDeletedEvent::NAME);
+
+            $user = $this->getUser();
+
+            if ($user === null) {
+                $sessionProvider->removeSessionByOrderId($order, $id);
+            }
 
             $this->addFlash('success', 'Order has been successfully deleted');
             return $this->redirectToRoute('shopping_cart');
@@ -118,11 +144,11 @@ class OrderController extends AbstractController
         $totalPrice = 0;
         $amountOrder = 0;
 
-        $orderProvider->loadAllOrdersByUser($user, $totalPrice, $amountOrder );
+        $orderProvider->loadAllOrdersByUser($user, $totalPrice, $amountOrder);
 
         // Calculating total price from all order each user and how many orders are there
         foreach ($user as $singleOrder) {
-            foreach($singleOrder->getOrders() as $order) {
+            foreach ($singleOrder->getOrders() as $order) {
                 $totalPrice += $order->getOrderPriceBrutto();
                 $amountOrder++;
             }
