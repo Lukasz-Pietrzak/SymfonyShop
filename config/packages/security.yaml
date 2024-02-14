@@ -33,6 +33,8 @@ security:
                 login_path: ui_login
                 check_path: ui_login
                 enable_csrf: true
+                success_handler: App\Security\AuthenticationSuccessHandler
+
             logout:
                 path: /logout
                 target: ui_home

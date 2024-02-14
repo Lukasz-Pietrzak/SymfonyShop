@@ -27,6 +27,14 @@ services:
     App\EventListener\OrderDeleted\OrderDeletedListener:
         tags:
             - { name: kernel.event_listener, event: 'order.deleted', method: 'onOrderDeleted' }
+
+    App\EventListener\LogoutSubscriber:
+        arguments:
+            $urlGenerator: '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+            $requestStack: '@Symfony\Component\HttpFoundation\RequestStack'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
     # App\EventListener\ExceptionListener:
     #     tags:
     #         - { name: kernel.event_listener, event: vich_uploader.pre_upload }
