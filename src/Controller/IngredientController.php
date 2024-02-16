@@ -41,7 +41,7 @@ class IngredientController extends AbstractController
             if (empty($dto->browse_field)) {
                 $ingredients = $ingredientProvider->loadAll();
             }else{
-                $ingredients = $ingredientProvider->loadProductsByName($dto->browse_field);
+                $ingredients = $ingredientProvider->loadIngredientsByName($dto->browse_field);
             }
             
         }

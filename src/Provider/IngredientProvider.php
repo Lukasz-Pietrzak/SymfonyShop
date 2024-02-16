@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Provider;
 
 use App\Entity\Ingredients;
-use App\Entity\Product;
 use App\Repository\IngredientQueryRepository;
-use App\Repository\ProductQueryRepository;
 
 class IngredientProvider
 {
@@ -21,7 +19,7 @@ class IngredientProvider
         $ingredient = $this->ingredientQueryRepository->find($ingredientId);
 
         if(!$ingredient){
-            throw new \InvalidArgumentException('Product not found');
+            throw new \InvalidArgumentException('Ingredient not found');
         }
         
         return $ingredient;
@@ -29,16 +27,15 @@ class IngredientProvider
     }
 
 
-    public function loadProductsByName($ingredientName):array 
+    public function loadIngredientsByName(string $ingredientName):array 
     {
-        $product = $this->ingredientQueryRepository->findBy(['ingredient' => $ingredientName]);
+        $ingredient = $this->ingredientQueryRepository->findBy(['ingredient' => $ingredientName]);
 
-
-        if(!$product){
-            throw new \InvalidArgumentException('Product not found');
+        if(!$ingredient){
+            throw new \InvalidArgumentException('ingredient not found');
         }
         
-        return $product;
+        return $ingredient;
 
     }
 
