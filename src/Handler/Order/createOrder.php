@@ -34,10 +34,12 @@ class createOrder
         $this->createOrderProduct->create($productId, $howManyClickPizza, $sizeSave, $order, $this->entityManager);
         $this->createOrderIngredients->create($dataToDatabase, $order, $this->entityManager);
 
-        if ($dto->user == null) {
+        if ($dto->user !== null) {
+        $order->getUser()->addOrder($order);
+        }else{
             $this->createSession($order, $session);
         }
-
+        
         $this->entityManager->flush();
     }
 

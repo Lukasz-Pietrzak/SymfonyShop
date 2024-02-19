@@ -29,18 +29,6 @@ class OrderProvider
 
     }
 
-    public function loadAllOrdersByUser(array $user)
-    {
-        foreach ($user as $userek) {
-            $orders = $this->loadOrderByUser($userek);
-            // Dla każdego użytkownika dodajemy jego zamówienia do tablicy wszystkich zamówień
-            foreach ($orders as $order) {
-                $userek->addOrder($order);
-            }
-        }
-
-    }
-
     public function loadOrderById(string $orderId): Order
     {
         $order = $this->orderQueryRepository->find($orderId);

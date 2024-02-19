@@ -4,8 +4,10 @@ declare (strict_types = 1);
 
 namespace App\Handler\Order;
 
+use App\Entity\Order;
 use App\Entity\OrderIngredient;
 use App\Provider\IngredientProvider;
+use Doctrine\ORM\EntityManagerInterface;
 
 class createOrderIngredients
 {
@@ -15,7 +17,7 @@ class createOrderIngredients
     ) {
     }
 
-    public function create($dataToDatabase, $order, $entityManager)
+    public function create(array $dataToDatabase, Order $order, EntityManagerInterface $entityManager): void
     {
 
         $amountOfIngredients = 1;
@@ -28,13 +30,10 @@ class createOrderIngredients
             if ($dataLength > 0) {
                 $ingredient = $this->ingredientProvider->loadIngredientById($data);
 
-                // Klucz identyfikujący składnik i zamówienie
-                $key = $ingredient->getId();
-
                 // Sprawdź, czy składnik został już przetworzony
-                if (isset($processedIngredients[$key])) {
+                if (isset($processedIngredients[$data])) {
                     // Jeżeli tak, zaktualizuj amountOfIngredients
-                    $processedIngredients[$key]->setAmountIngredient($processedIngredients[$key]->getAmountIngredient() + 1);
+                    $processedIngredients[$data]->setAmountIngredient($processedIngredients[$data]->getAmountIngredient() + 1);
                 } else {
                     // Jeżeli nie istnieje, utwórz nowy OrderIngredient
                     $orderIngredient = new OrderIngredient(
@@ -43,12 +42,11 @@ class createOrderIngredients
                         Orders: $order);
 
                     // Persistuj nowy OrderIngredient
-                    dump($orderIngredient->getOrders()->addOrderIngredient($orderIngredient));
                    
                     $entityManager->persist($orderIngredient);
 
                     // Dodaj do przetworzonych składników
-                    $processedIngredients[$key] = $orderIngredient;
+                    $processedIngredients[$data] = $orderIngredient;
                 }
             }
         }

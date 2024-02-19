@@ -136,15 +136,12 @@ class OrderController extends AbstractController
     #[Route('/order-list', name: 'order_list')]
     #[IsGranted('ROLE_ADMIN')]
     public function order_list(
-        OrderProvider $orderProvider,
         UserProvider $userProvider,
     ): Response {
         $user = $userProvider->loadAll();
 
         $totalPrice = 0;
         $amountOrder = 0;
-
-        $orderProvider->loadAllOrdersByUser($user, $totalPrice, $amountOrder);
 
         // Calculating total price from all order each user and how many orders are there
         foreach ($user as $singleOrder) {
