@@ -16,12 +16,12 @@ class SessionProvider
         $this->requestStack = $requestStack;
     }
 
-    public function removeSessionByOrderId(Order $order, string $id): void
+    public function removeSessionByOrderId(Order $order, string $id, &$orderSession): void
     {
         $request = $this->requestStack->getCurrentRequest();
         $session = $request->getSession();
 
-        $orderSession = $session->get('order', []); // Pobierz tablicę z sesji, domyślnie pusta tablica, jeśli nie ma danych w sesji
+        // $orderSession = $session->get('order', []); // Pobierz tablicę z sesji, domyślnie pusta tablica, jeśli nie ma danych w sesji
 
         // Przeszukaj tablicę w poszukiwaniu obiektu o zadanym id i usuń ten obiekt
         foreach ($orderSession as $key => $order) {

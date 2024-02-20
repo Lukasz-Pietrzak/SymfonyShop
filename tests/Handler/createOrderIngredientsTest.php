@@ -27,43 +27,43 @@ final class createOrderIngredientsTest extends TestCase
         $processedIngredients = [];
 
         // Define what the mocked method should return
-        $mockOrderIngredients->method('create')->willReturnCallback(
-            function ($dataToDatabase, $order, $entityManager) use (&$processedIngredients) {
-                // Define the behavior of loadOrderByUser method
-                $amountOfIngredients = 1;
+        // $mockOrderIngredients->method('create')->willReturnCallback(
+        //     function ($dataToDatabase, $order, $entityManager) use (&$processedIngredients) {
+        //         // Define the behavior of loadOrderByUser method
+        //         $amountOfIngredients = 1;
 
-                foreach ($dataToDatabase as $data) {
-                    $dataLength = strlen($data);
+        //         foreach ($dataToDatabase as $data) {
+        //             $dataLength = strlen($data);
         
-                    if ($dataLength > 0) {
-                        $mockIngredientProvider = $this->createMock(IngredientProvider::class);
-                        $mockIngredient = $this->createMock(Ingredients::class);
+        //             if ($dataLength > 0) {
+        //                 $mockIngredientProvider = $this->createMock(IngredientProvider::class);
+        //                 $mockIngredient = $this->createMock(Ingredients::class);
 
-                        $mockIngredientProvider->method('loadIngredientById')->willReturn($mockIngredient);
+        //                 $mockIngredientProvider->method('loadIngredientById')->willReturn($mockIngredient);
                         
-                        $ingredient = $mockIngredientProvider->loadIngredientById($data);
+        //                 $ingredient = $mockIngredientProvider->loadIngredientById($data);
         
-                        // Sprawdź, czy składnik został już przetworzony
-                        if (isset($processedIngredients[$data])) {
-                            // Jeżeli tak, zaktualizuj amountOfIngredients
-                            $processedIngredients[$data]->setAmountIngredient($processedIngredients[$data]->getAmountIngredient() + 1);
-                        } else {
-                            // Jeżeli nie istnieje, utwórz nowy OrderIngredient
-                            $orderIngredient = new OrderIngredient(
-                                amountIngredient: $amountOfIngredients,
-                                Ingredient: $ingredient,
-                                Orders: $order);
+        //                 // Sprawdź, czy składnik został już przetworzony
+        //                 if (isset($processedIngredients[$data])) {
+        //                     // Jeżeli tak, zaktualizuj amountOfIngredients
+        //                     $processedIngredients[$data]->setAmountIngredient($processedIngredients[$data]->getAmountIngredient() + 1);
+        //                 } else {
+        //                     // Jeżeli nie istnieje, utwórz nowy OrderIngredient
+        //                     $orderIngredient = new OrderIngredient(
+        //                         amountIngredient: $amountOfIngredients,
+        //                         Ingredient: $ingredient,
+        //                         Orders: $order);
         
-                            // Persistuj nowy OrderIngredient
-                            $entityManager->persist($orderIngredient);
+        //                     // Persistuj nowy OrderIngredient
+        //                     $entityManager->persist($orderIngredient);
         
-                            // Dodaj do przetworzonych składników
-                            $processedIngredients[$data] = $orderIngredient;
-                        }
-                    }
-                }
-            }
-        );
+        //                     // Dodaj do przetworzonych składników
+        //                     $processedIngredients[$data] = $orderIngredient;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // );
 
         // Call the mocked method
         $mockOrderIngredients->create($dataToDatabase, $mockOrder, $mockEntityManagerInterface);

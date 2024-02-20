@@ -104,7 +104,8 @@ class OrderController extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         Security $security,
         UserProvider $userProvider,
-        SessionProvider $sessionProvider
+        SessionProvider $sessionProvider,
+        SessionInterface $session
     ): Response {
         if (!$security->isGranted('ROLE_ADMIN')) {
 
@@ -115,7 +116,9 @@ class OrderController extends AbstractController
             $user = $this->getUser();
 
             if ($user === null) {
-                $sessionProvider->removeSessionByOrderId($order, $id);
+                // $sessionProvider->setSession($sessionInterface);
+                 $orderSession = $session->get('order', []); 
+                $sessionProvider->removeSessionByOrderId($order, $id, $orderSession);
             }
 
             $this->addFlash('success', 'Order has been successfully deleted');
