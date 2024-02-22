@@ -11,18 +11,24 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class createOrderIngredients
 {
+    protected $processedIngredients;
+    protected $order;
 
     public function __construct(
         private readonly IngredientProvider $ingredientProvider,
     ) {
     }
 
-    public function create(array $dataToDatabase, Order $order, EntityManagerInterface $entityManager): void
+    public function getProcessedIngredients(){
+        return $this->processedIngredients;
+    }
+
+    public function create(array $dataToDatabase, Order &$order, EntityManagerInterface $entityManager): void
     {
 
         $amountOfIngredients = 1;
 
-        $processedIngredients = [];
+        $this->processedIngredients = [];
 
         foreach ($dataToDatabase as $data) {
             $dataLength = strlen($data);
@@ -31,9 +37,9 @@ class createOrderIngredients
                 $ingredient = $this->ingredientProvider->loadIngredientById($data);
 
                 // Sprawdź, czy składnik został już przetworzony
-                if (isset($processedIngredients[$data])) {
+                if (isset($this->processedIngredients[$data])) {
                     // Jeżeli tak, zaktualizuj amountOfIngredients
-                    $processedIngredients[$data]->setAmountIngredient($processedIngredients[$data]->getAmountIngredient() + 1);
+                    $this->processedIngredients[$data]->setAmountIngredient($this->processedIngredients[$data]->getAmountIngredient() + 1);
                 } else {
                     // Jeżeli nie istnieje, utwórz nowy OrderIngredient
                     $orderIngredient = new OrderIngredient(
@@ -41,12 +47,13 @@ class createOrderIngredients
                         Ingredient: $ingredient,
                         Orders: $order);
 
+                    $orderIngredient->getOrders()->addOrderIngredient($orderIngredient);
                     // Persistuj nowy OrderIngredient
-                   
+
                     $entityManager->persist($orderIngredient);
 
                     // Dodaj do przetworzonych składników
-                    $processedIngredients[$data] = $orderIngredient;
+                    $this->processedIngredients[$data] = $orderIngredient;
                 }
             }
         }
