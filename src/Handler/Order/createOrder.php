@@ -18,10 +18,20 @@ class createOrder
         private readonly createOrderIngredients $createOrderIngredients,
     ) {
     }
+    protected Order $order;
+    protected array $orderSession;
 
-    public function create(OrderDTO $dto, $productId, $howManyClickPizza, $sizeSave, $dataToDatabase, SessionInterface $session): void
+    public function getOrder(){
+        return $this->order;
+    }
+
+    public function getOrderSession(){
+        return $this->orderSession;
+    }
+
+    public function create(OrderDTO $dto, string $productId, int $howManyClickPizza, string $sizeSave, array $dataToDatabase, SessionInterface $session): void
     {
-        $order = new Order(
+        $this->order = new Order(
             orderPriceNetto: $dto->orderPriceNetto,
             orderPriceBrutto: $dto->orderPriceBrutto,
             orderPriceVAT: $dto->orderPriceVAT,
@@ -29,15 +39,15 @@ class createOrder
             User: $dto->user
         );
 
-        $this->entityManager->persist($order);
+        $this->entityManager->persist($this->order);
 
-        $this->createOrderProduct->create($productId, $howManyClickPizza, $sizeSave, $order, $this->entityManager);
-        $this->createOrderIngredients->create($dataToDatabase, $order, $this->entityManager);
+        $this->createOrderProduct->create($productId, $howManyClickPizza, $sizeSave, $this->order, $this->entityManager);
+        $this->createOrderIngredients->create($dataToDatabase, $this->order, $this->entityManager);
 
         if ($dto->user !== null) {
-        $order->getUser()->addOrder($order);
+        $this->order->getUser()->addOrder($this->order);
         }else{
-            $this->createSession($order, $session);
+            $this->createSession($this->order, $session);
         }
         
         $this->entityManager->flush();
@@ -48,17 +58,17 @@ class createOrder
         // Sprawdzenie, czy sesja już istnieje
         if ($session->has('order')) {
             // Pobranie aktualnych danych z sesji
-            $orderSession = $session->get('order');
+            $this->orderSession = $session->get('order');
         } else {
             // Jeśli sesja nie istnieje, utwórz nową pustą tablicę
-            $orderSession = array();
+            $this->orderSession = array();
         }
 
         // Dodanie nowej wartości do tablicy orderSession
-        $orderSession[] = $order;
+        $this->orderSession[] = $order;
 
         // Ustawienie tablicy orderSession w sesji
-        $session->set('order', $orderSession);
+        $session->set('order', $this->orderSession);
     }
 
 }

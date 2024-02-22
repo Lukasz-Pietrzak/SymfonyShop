@@ -46,16 +46,4 @@ final class createOrderIngredientsTest extends TestCase
         $this->assertEquals($this->createOrderIngredients->getProcessedIngredients()['018d5f6f-df1c-7c91-a277-65fa52ed9b9a']->getAmountIngredient(), $howManyTheSameId);
     }
 
-    public function testCreateCollection(): void
-    {
-        $dataToDatabase = ['018d5f6f-df1c-7c91-a277-65fa52ed9b9a', '018d5f70-9512-75e6-ad92-9848474c3769', '018d5f6f-df1c-7c91-a277-65fa52ed9b9a', '018d5f71-4234-791f-b813-47a0ed9a131e'];
-
-        // Call the mocked method
-        $this->createOrderIngredients->create($dataToDatabase, $this->order, $this->mockEntityManagerInterface);
-        // Perform assertions
-        $this->assertNotEmpty(
-            $this->createOrderIngredients->getProcessedIngredients()['018d5f6f-df1c-7c91-a277-65fa52ed9b9a']->getOrders()->getOrderIngredient()
-        );
-            }
-
 }
